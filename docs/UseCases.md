@@ -119,5 +119,12 @@ Postcondition
 
 Extensions
 
-* 1-7a. The device is out of battery
-  * 1-7a1. The user charges the device, and tries again from step 1
+* 1-7a. The device is out of battery.
+  * 1-7a1. The user charges the device, and tries again from step 1.
+* 7a. There are no more sessions stored.
+  * 7a1. The device screen resets, no longer displaying the log/history menu.
+  * 7a2. The default menu is displayed (the arrow buttons now interact with this menu).
+
+Related Information
+
+* To leave this menu (step 3 or 7), the user could enter UC7 by selecting a session.

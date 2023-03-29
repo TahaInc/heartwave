@@ -37,10 +37,10 @@ Precondition
 
 Main Success Scenario
 
-1. User presses the power button
-2. The interface stops displaying information (such as graphs and lights)
-3. The interface locks
-4. The device turns off
+1. User presses the power button.
+2. The interface stops displaying information (such as graphs and lights).
+3. The interface locks.
+4. The device turns off.
 
 Postcondition
 
@@ -63,6 +63,32 @@ Extensions
 ## View Current Session Metrics (UC6)
 
 ## View Results (UC7)
+
+Primary Actor
+
+* Device user
+
+Precondition
+
+* The user has the device
+* There exists session data to be displayed
+* The session data to be displayed has been selected (either from the log/history or at the end of a session)
+
+Main Success Scenario
+
+1. The percentage of time spent in each coherence level is calculated.
+2. The average coherence is calculated.
+3. The main window displays the following information: percentage of time spent in each coherence level, average coherence, challenge level, length of the session, achievement score, and the entire HRV graph.
+
+Postcondition
+
+* The information has been displayed correctly
+
+Extensions
+
+* 3a. The user selects another menu option while viewing the information
+  * 3a1. The main window stops displaying the information.
+  * 3a2. The newly selected option is run.
 
 ## Delete a Result (UC8)
 

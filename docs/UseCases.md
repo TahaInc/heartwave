@@ -78,17 +78,46 @@ Main Success Scenario
 
 1. The percentage of time spent in each coherence level is calculated.
 2. The average coherence is calculated.
-3. The main window displays the following information: percentage of time spent in each coherence level, average coherence, challenge level, length of the session, achievement score, and the entire HRV graph.
+3. The device screen displays the following information: percentage of time spent in each coherence level, average coherence, challenge level, length of the session, achievement score, and the entire HRV graph.
+4. The user presses the selector button
+5. The device screen stops displaying the information
 
 Postcondition
 
 * The information has been displayed correctly
+* The information is no longer being displayed
 
 Extensions
 
-* 3a. The user selects another menu option while viewing the information
-  * 3a1. The main window stops displaying the information.
-  * 3a2. The newly selected option is run.
+* 1-5a. The device is out of battery
+  * 1-5a1. The user charges the device, and tries again
 
 ## Delete a Result (UC8)
 
+Primary Actor
+
+* Device user
+
+Precondition
+
+* The device is not currently in a session
+* There exists session data to be deleted
+
+Main Success Scenario
+
+1. The user presses arrow buttons to navigate to the log/history menu option
+2. The user presses the selector button
+3. A list of previous sessions is displayed on the device screen
+4. The user presses arrow buttons to navigate to the desired session
+5. The user presses the side arrow button the navigate to the delete option
+6. The session data is deleted
+7. The list being displayed is updated to reflect the deletion
+
+Postcondition
+
+* The selected session's data has been deleted (it is no longer being stored)
+
+Extensions
+
+* 1-7a. The device is out of battery
+  * 1-7a1. The user charges the device, and tries again from step 1

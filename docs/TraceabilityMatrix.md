@@ -1,4 +1,7 @@
-Note: The user interface provided is a suggestion, and not a requirement. However, some elements of the provided interface are required.
+Notes: 
+The user interface provided is a suggestion, and not a requirement. However, some elements of the provided interface are required.
+This traceability matrix does not currently include details regarding the calculation of certain metrics (such as Achievement score).
+
 | Requirement | Use Case | Implemented By | Tested By | Description |
 | :---------- | :------- | :------------- | :-------- | :---------- |
 | A light indicates an active pulse reading |     |    |    |    |
@@ -15,11 +18,16 @@ Note: The user interface provided is a suggestion, and not a requirement. Howeve
 | The screen displays the current coherence score |    |    |    |    |
 | The screen displays the length of the current session |    |    |    |    |
 | The screen displays the current achievement score |    |    |    |    |
+| The screen displays the HRV graph |    |    |    |    |
 | There is a 'Breath Pacer' as a progression of lights or a bar |    |    |    |    |
 | The default 'Breath Pacer' setting is 10 seconds |    |    |    |    |
 | The 'Settings' menu option allows modification of challenge level and breath pacer setting |    |    |    |    |
 | There are 4 challenge levels (Beginner -> Advanced) |    |    |    |    |
 | The breath pacer settings range from 1-30 seconds |    |    |    |    |
 | A session summary appears at the end of each session |    |    |    |    |
-| Session summaries display challenge level, percentage of time in each coherence level, <br><br> average coherence, length of session, achievement score, and the HRV graph |    |    |    |    |
-|
+| Session summaries display challenge level, percentage of time in each coherence level, average coherence, length of session, achievement score, and the HRV graph |   |    |    |    |
+| The 'Log/History' menu option shows previous sessions and dates |    |    |    |    |
+| When a logged session is selected, it's summary is displayed alongisde the ability to delete it |    |    |    |    |
+| The device can be reset to its intial state with no stored data |    |    |    |    |
+| The session screen displays the current battery level |    |    |    |    |
+| There is a beep when coherence level changes |    |    |    |    |

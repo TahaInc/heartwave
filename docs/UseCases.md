@@ -60,7 +60,71 @@ Extensions
 
 ## Run Through a Session With a User (UC5)
 
+Primary Actor
+
+* Device user
+
+Precondition
+
+* The user has the device
+* The device is on
+* The "start session" menu option is selected, but not yet pressed
+
+Main Success Scenario
+
+1. The user presses the selector to initiate a session.
+2. The device reads the user's heart rate.
+3. The device displays the current session metrics (see UC6).
+4. The device repeats steps 3 and 4 until stopped by the user, waiting 1 second between each repetition.
+5. The user presses the selector again to end the session.
+6. The device saves the current session.
+7. The device displays the results of the session (see UC7).
+
+Postcondition
+
+* The device is functional and displaying the session results.
+
+Extensions
+
+* 2a. There is no heart rate data available.
+  * 2a1. The session is automatically ended.
+  * 2a2. Steps 6 and 7 are executed.
+* 4a. The device gets turned off.
+  * 4a1. See UC2, extension 1a.
+
 ## View Current Session Metrics (UC6)
+
+Primary Actor
+
+* The device
+
+Precondition
+
+* The user has the device
+* The device is on
+* A session is currently running
+
+Main Success Scenario
+
+1. The device plots the most recent 64 seconds of heart rate data on the graph, with the last data point collected being the rightmost point displayed.
+2. The device displays the time elapsed in the current session.
+3. The device calculates and displays the coherence score.
+4. If the session time elapsed is a multiple of 5, the device calculates and displays the achievement score.
+5. The breath meter is updated. The meter is filled up based on the session time elapsed. One cycle of the meter (empty to empty) takes (by default) 10 seconds, and the meter is completely filled at the halfway point.
+6. The device increments the session time elapsed by one second (the time between display updates).
+
+Postcondition
+
+* The data is displayed on the screen
+
+Extensions
+
+* 1a. Less than 64 seconds of data is available.
+  * 1a1. All available data is presented, with a gap of no data on the left.
+  * 1a2. The data is shifted to the left every time a new data point is collected until a full 64 seconds are available.
+* 5a. The user selected a time between breaths other than the default of 10 seconds.
+  * 5a1. The desired time between breaths will be stored in a variable available to the function that calculates how full the breath meter will be.
+  * 5a1. The function takes the desired time between breaths into account.
 
 ## View Results (UC7)
 

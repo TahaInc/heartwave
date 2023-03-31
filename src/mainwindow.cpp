@@ -23,6 +23,7 @@ void MainWindow::startup() {
     ui->screen->setEnabled(true);
     ui->menu->setEnabled(true);
     ui->back->setEnabled(true);
+    ui->select->setEnabled(true);
     ui->up->setEnabled(true);
     ui->right->setEnabled(true);
     ui->down->setEnabled(true);
@@ -48,6 +49,7 @@ void MainWindow::shutdown() {
     ui->screen->setEnabled(false);
     ui->menu->setEnabled(false);
     ui->back->setEnabled(false);
+    ui->select->setEnabled(false);
     ui->up->setEnabled(false);
     ui->right->setEnabled(false);
     ui->down->setEnabled(false);

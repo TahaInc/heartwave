@@ -57,10 +57,67 @@ Extensions
   * 1a1. The session terminates.
   * 1a2. The session data is stored to the device.
 
+## Change Breath Pacer Level (UC3)
 
-## Change Power Level (UC3)
+Primary Actor
+
+* Device user
+
+Precondition
+
+* The user has the device
+* The device is on
+* The "settings" menu option is selected, but not yet pressed
+
+Main Success Scenario
+
+1. The user presses the selector to enter the settings menu.
+2. The user navigates using the arrows buttons to the change breath pacer level setting and selects it.
+3. The user selects their requested breath pacer interval, ranging from 1-30 seconds.
+
+Postcondition
+
+* The device updates the breath pacer level to the desired interval.
+
+Extensions
+
+* 1-3a. The device is out of battery.
+  * 1-3a1. The user charges the device, and tries again from step 1.
+* 3a. An invalid value is selected
+  * 3a1. The device defaults the breath pacer interval value to 10 seconds.
+* 3b. The device has never been initialized or recently reset
+  * 3b1. The device defaults the breath pacer interval value to 10 seconds.
 
 ## Select a Challenge Level (UC4)
+
+Primary Actor
+
+* Device user
+
+Precondition
+
+* The user has the device
+* The device is on
+* The "settings" menu option is selected, but not yet pressed
+
+Main Success Scenario
+
+1. The user presses the selector to enter the settings menu.
+2. The user navigates using the arrows buttons to the change challenge level setting and selects it.
+3. The user selects their requested challenge level, ranging from 1-4 (beginner to advanced).
+
+Postcondition
+
+* The device updates the challenge level to the desired value.
+
+Extensions
+
+* 1-3a. The device is out of battery.
+  * 1-3a1. The user charges the device, and tries again from step 1.
+* 3a. An invalid value is selected
+  * 3a1. The device defaults to level 1.
+* 3b. The device has never been initialized or recently reset
+  * 3b1. The device defaults to level 1.
 
 ## Run Through a Session With a User (UC5)
 

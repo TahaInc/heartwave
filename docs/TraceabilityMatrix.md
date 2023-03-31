@@ -31,3 +31,4 @@ This traceability matrix does not currently include details regarding the calcul
 | The device can be reset to its intial state with no stored data |    |    |    |    |
 | The session screen displays the current battery level |    |    |    |    |
 | There is a beep when coherence level changes |    |    |    |    |
+| There's an on/off button that turns on/off the device | 1, 2 | MainWindow.h |    |    |

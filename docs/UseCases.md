@@ -12,12 +12,16 @@ Precondition
 
 Main Success Scenario
 
-1. User presses the power button.
-2. The device turn on.
+1. The user presses the power button.
+2. The device turns on.
+3. The device unlocks the interface.
+4. The device displays the main menu.
 
 Postcondition
 
-* The device has been turned on and is waiting on the main menu page.
+* The device has been turned on.
+* The device is waiting on the main menu page.
+* The device interface is usable.
 
 Extensions
 

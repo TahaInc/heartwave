@@ -44,6 +44,7 @@ void MainWindow::loop() {
 
 // Shuts down the device
 void MainWindow::shutdown() {
+    // Disable the display when the device is powered off
     ui->screen->setEnabled(false);
     ui->menu->setEnabled(false);
     ui->back->setEnabled(false);

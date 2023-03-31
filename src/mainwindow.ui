@@ -747,52 +747,17 @@
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="coherenceRed">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
+   <widget class="QLabel" name="coherenceLed">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>190</x>
       <y>20</y>
-      <width>54</width>
-      <height>17</height>
+      <width>71</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(204, 0, 0);</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="coherenceBlue">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>20</y>
-      <width>54</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(44, 98, 203)</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="coherenceGreen">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>20</y>
-      <width>54</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(115, 210, 22)</string>
+     <string notr="true">background-color: rgb(186, 189, 182)</string>
     </property>
     <property name="text">
      <string/>
@@ -826,9 +791,7 @@
    <zorder>select</zorder>
    <zorder>menu</zorder>
    <zorder>back</zorder>
-   <zorder>coherenceRed</zorder>
-   <zorder>coherenceBlue</zorder>
-   <zorder>coherenceGreen</zorder>
+   <zorder>coherenceLed</zorder>
    <zorder>plug</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">

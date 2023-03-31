@@ -44,6 +44,7 @@ void MainWindow::loop() {
 
 // Shuts down the device
 void MainWindow::shutdown() {
+    // Disable the display when the device is powered off
     ui->screen->setEnabled(false);
     ui->menu->setEnabled(false);
     ui->back->setEnabled(false);
@@ -80,17 +81,11 @@ void MainWindow::setCoherenceScore(float c) {
     ui->coherence->setText(QString::number(c));
 
     if (true) { // TODO: If coherence is medium
-        ui->coherenceRed->setStyleSheet(QString("background-color: " + GRAY));
-        ui->coherenceBlue->setStyleSheet(QString("background-color: " + BLUE));
-        ui->coherenceGreen->setStyleSheet(QString("background-color: " + GRAY));
+        ui->coherenceLed->setStyleSheet(QString("background-color: " + BLUE));
     } else if (true) { // TODO: If coherence is high
-        ui->coherenceRed->setStyleSheet(QString("background-color: " + GRAY));
-        ui->coherenceBlue->setStyleSheet(QString("background-color: " + GRAY));
-        ui->coherenceGreen->setStyleSheet(QString("background-color: " + GREEN));
+        ui->coherenceLed->setStyleSheet(QString("background-color: " + GREEN));
     } else { // TODO: If coherence is low
-        ui->coherenceRed->setStyleSheet(QString("background-color: " + RED));
-        ui->coherenceBlue->setStyleSheet(QString("background-color: " + GRAY));
-        ui->coherenceGreen->setStyleSheet(QString("background-color: " + GRAY));
+        ui->coherenceLed->setStyleSheet(QString("background-color: " + RED));
     }
 }
 

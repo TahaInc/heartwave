@@ -133,6 +133,7 @@ void MainWindow::showMainMenu() {
     ui->menu->addItem("View history");
     ui->menu->addItem("Settings");
     ui->menu->setCurrentRow(menuItemIndex);
+    ui->menuLabel->setText("Main Menu");
 
     ui->upButton->setEnabled(true);
     ui->rightButton->setEnabled(false);
@@ -152,6 +153,7 @@ void MainWindow::showSessionDisplay() {
     ui->rightButton->setEnabled(false);
     ui->downButton->setEnabled(false);
     ui->leftButton->setEnabled(false);
+    ui->menuLabel->setText("Session");
 
     ui->graph->setBackground(QBrush(QColor(ALTGRAY)));
     ui->graph->replot();
@@ -171,6 +173,7 @@ void MainWindow::showHistoryMenu() {
     ui->rightButton->setEnabled(true);
     ui->downButton->setEnabled(true);
     ui->leftButton->setEnabled(true);
+    ui->menuLabel->setText("History");
 
     for(int i=0; i<sessionHistory.count(); ++i) {
         // TODO: For each session add an item
@@ -192,6 +195,7 @@ void MainWindow::showSettingsMenu() {
     ui->rightButton->setEnabled(true);
     ui->downButton->setEnabled(true);
     ui->leftButton->setEnabled(true);
+    ui->menuLabel->setText("Settings");
 
     if (challengeLevelSetting == 1) {
         ui->menu->addItem("Challenge level: <b>Beginner</b>");

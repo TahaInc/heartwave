@@ -345,6 +345,7 @@ void MainWindow::startSession() {
     breathPacerTimer->start(breathPacerSetting * 1000 / (BPTICKS * 2));
 
     currentSession = new Session();
+    breathPacerTick();
 }
 
 // End the current session

@@ -38,8 +38,9 @@ private:
     QTimer *batteryTimer;
     QTimer *timeTimer;
     QList<int> menuHistory;
-    QList<Session> sessionHistory;
-    Session currentSession;
+    QList<Session*> sessionHistory;
+    Session *currentSession;
+    HeartRateSensor *hrSensor;
     int battery;
     int menuIndex;
     int menuItemIndex;

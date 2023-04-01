@@ -21,6 +21,8 @@ void MainWindow::startup() {
     battery = 100;
     batteryTimer = new QTimer(this);
     timeTimer = new QTimer(this);
+    hrSensor = new HeartRateSensor();
+    currentSession = NULL;
     menuHistory.clear();
 
     ui->menuButton->setEnabled(true);
@@ -137,7 +139,7 @@ void MainWindow::showMainMenu() {
     ui->downButton->setEnabled(true);
     ui->leftButton->setEnabled(false);
 
-    // TODO: If session active, end it
+    if (currentSession) { endSession(); }
 }
 
 // Shows the session display
@@ -154,7 +156,7 @@ void MainWindow::showSessionDisplay() {
     ui->graph->setBackground(QBrush(QColor(ALTGRAY)));
     ui->graph->replot();
 
-    startSession(); // TODO: Only start if not already started
+    if (!currentSession) { startSession(); }
 }
 
 // Shows the history menu
@@ -170,7 +172,10 @@ void MainWindow::showHistoryMenu() {
     ui->downButton->setEnabled(true);
     ui->leftButton->setEnabled(true);
 
-    // TODO: For every log entry, add an item
+    for(int i=0; i<sessionHistory.count(); ++i) {
+        // TODO: For each session add an item
+        // ui->menu->addItem(sessionHistory[i]->getName());
+    }
 
     ui->menu->setCurrentRow(menuItemIndex);
 }
@@ -294,13 +299,13 @@ void MainWindow::selectButton() {
             showSettingsMenu();
         }
     } else if (menuIndex == 1) {
-        // TODO: select corresponding history log
+        // TODO: select corresponding history log with sessionHistory[menuItemIndex]
     } else if (menuIndex == 2) {
         if (menuItemIndex == 2) {
             reset();
         }
     } else if (menuIndex == 3) {
-        // TODO: If session active, end it
+        if (currentSession) { endSession(); }
     }
 }
 
@@ -308,7 +313,7 @@ void MainWindow::selectButton() {
 void MainWindow::backButton() {
     if (menuHistory.size() >= 2) {
         if (menuHistory.last() == 3) {
-            // TODO: Check if session active, and end it
+            if (currentSession) { endSession(); }
         }
 
         menuHistory.removeLast();
@@ -339,7 +344,7 @@ void MainWindow::startSession() {
     sessionTimer->start(1000);
     breathPacerTimer->start(breathPacerSetting * 1000 / (BPTICKS * 2));
 
-    // TODO: Initialize session object, etc
+    currentSession = new Session();
 }
 
 // End the current session
@@ -347,7 +352,10 @@ void MainWindow::endSession() {
     sessionTimer->stop();
     breathPacerTimer->stop();
 
-    // TODO: Save, etc
+    if (currentSession) {
+        sessionHistory.append(currentSession);
+        currentSession = NULL;
+    }
 }
 
 // Runs a session loop
@@ -383,12 +391,26 @@ void MainWindow::breathPacerTick() {
 void MainWindow::setCoherenceScore(float c) {
     ui->coherence->setText(QString::number(c));
 
-    // TODO: If coherence is medium, high or low respectively
-    if (true) {
+    int lower, upper;
+    if (challengeLevelSetting == 1) {
+        lower = 0.5;
+        upper = 0.9;
+    } else if (challengeLevelSetting == 2) {
+        lower = 0.6;
+        upper = 2.1;
+    } else if (challengeLevelSetting == 3) {
+        lower = 1.8;
+        upper = 4;
+    } else if (challengeLevelSetting == 4) {
+        lower = 4;
+        upper = 6;
+    }
+
+    if (c >= lower && c <= upper) {
         ui->coherenceLed->setStyleSheet(QString("background-color: " + BLUE));
-    } else if (true) {
+    } else if (c > upper) {
         ui->coherenceLed->setStyleSheet(QString("background-color: " + GREEN));
-    } else {
+    } else if (c < lower) {
         ui->coherenceLed->setStyleSheet(QString("background-color: " + RED));
     }
 }
@@ -442,9 +464,9 @@ void MainWindow::updateTime() {
 void MainWindow::reset() {
     breathPacerSetting = 10;
     challengeLevelSetting = 1;
-    menuHistory.clear();
 
-    // TODO: Delete history, etc
+    menuHistory.clear();
+    sessionHistory.clear();
 
     showMainMenu();
 }

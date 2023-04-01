@@ -7,6 +7,8 @@
 #include <QString>
 #include <QList>
 #include <ctime>
+#include "session.h"
+#include "heartratesensor.h"
 
 #define BLACK (QString("#000000"))
 #define GRAY (QString("#BABDB6"))
@@ -36,6 +38,8 @@ private:
     QTimer *batteryTimer;
     QTimer *timeTimer;
     QList<int> menuHistory;
+    QList<Session> sessionHistory;
+    Session currentSession;
     int battery;
     int menuIndex;
     int menuItemIndex;

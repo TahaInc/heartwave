@@ -22,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
+    menuitemstyle.h \
     qcustomplot.h
 
 FORMS += \

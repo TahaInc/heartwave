@@ -5,11 +5,17 @@
 #include <QDebug>
 #include <QTimer>
 #include <QString>
+#include <QList>
+#include <ctime>
 
-#define GRAY (QString("rgb(186, 189, 182)"))
-#define GREEN (QString("rgb(115, 210, 22)"))
-#define RED (QString("rgb(204, 0, 0)"))
-#define BLUE (QString("rgb(44, 98, 203)"))
+#define BLACK (QString("#000000"))
+#define GRAY (QString("#BABDB6"))
+#define ALTGRAY (QString("#D3D7CF"))
+#define GREEN (QString("#73D216"))
+#define RED (QString("#CC0000"))
+#define BLUE (QString("#2C62CB"))
+#define BPTICKS 17
+#define BATTERYLIFE 30 // in minutes
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,17 +31,42 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *timer;
+    QTimer *sessionTimer;
+    QTimer *breathPacerTimer;
+    QTimer *batteryTimer;
+    QTimer *timeTimer;
+    QList<int> menuHistory;
     int battery;
-    void setBreathPacer(float v);
+    int menuIndex;
+    int menuItemIndex;
+    int breathPacerIndex;
+    int breathPacerSetting = 10;
+    int challengeLevelSetting = 1;
     void setCoherenceScore(float c);
     void setLength(float l);
     void setAchievement(float a);
-    int decrementBattery();
+    void showHeartRateContact(bool h);
+    void showSessionDisplay();
+    void showHistoryMenu();
+    void showSettingsMenu();
+    void startSession();
+    void endSession();
+    void reset();
 
 private slots:
     void startup();
     void shutdown();
-    void loop();
+    void upButton();
+    void downButton();
+    void rightButton();
+    void leftButton();
+    void selectButton();
+    void backButton();
+    void showMainMenu();
+    void sessionTick();
+    void breathPacerTick();
+    void updateBattery();
+    void updateTime();
+
 };
 #endif // MAINWINDOW_H

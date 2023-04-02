@@ -321,6 +321,9 @@ void MainWindow::backButton() {
         }
 
         menuHistory.removeLast();
+
+        if (menuIndex == menuHistory.last()) { return; }
+
         menuIndex = menuHistory.last();
         menuHistory.removeLast();
 

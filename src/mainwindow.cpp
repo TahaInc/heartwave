@@ -59,6 +59,7 @@ void MainWindow::startup() {
     ui->hrIcon->setVisible(true);
     ui->graph->setVisible(true);
     ui->menu->setVisible(true);
+    ui->menuLabel->setVisible(true);
 
     for (int i=1; i<BPTICKS; ++i) {
         findChild<QLabel*>(QString("bp%1").arg(i))->setVisible(true);
@@ -112,6 +113,7 @@ void MainWindow::shutdown() {
     ui->hrIcon->setVisible(false);
     ui->graph->setVisible(false);
     ui->menu->setVisible(false);
+    ui->menuLabel->setVisible(false);
 
     for (int i=1; i<BPTICKS; ++i) {
         findChild<QLabel*>(QString("bp%1").arg(i))->setVisible(false);

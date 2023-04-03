@@ -373,6 +373,10 @@ void MainWindow::sessionTick() {
     // TODO: Session loop
 }
 
+void MainWindow::displaySessionMetrics() {
+    // TODO: Session metrics
+}
+
 // Updates the breath pacer by incrementing/decrementing the lights
 void MainWindow::breathPacerTick() {
     for (int i=1; i<BPTICKS; ++i) {

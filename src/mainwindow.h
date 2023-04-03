@@ -53,6 +53,7 @@ private:
     void showHeartRateContact(bool h);
     void showSessionDisplay();
     void showHistoryMenu();
+    void displaySessionMetrics();
     void showSettingsMenu();
     void startSession();
     void endSession();

@@ -3,16 +3,17 @@
 
 #include "qcustomplot.h"
 #include <QVector>
+#include <QtMath>
 
 class Session
 {
 public:
     Session();
 
-    inline void addHeartRate(float hr) { hrData.push_back(hr); }
+    inline void addHeartRate(int hr) { hrData.push_back(hr); }
     void plotCurrentData(QCPGraph *);
     void plotAllData(QCPGraph *);
-    inline float getLastCoherenceScore() { return hrData.last(); }
+    inline float getLastCoherenceScore() { return coherenceScores.last(); }
     float getAchievement();
 
 private:

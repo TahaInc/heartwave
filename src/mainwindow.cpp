@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "menuitemstyle.h"
 #include "ui_mainwindow.h"
-
+#include <iostream>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -348,18 +348,18 @@ void MainWindow::backButton() {
 
 // Starts a new session
 void MainWindow::startSession() {
-    sessionTimer = new QTimer(this);
     breathPacerTimer = new QTimer(this);
     breathPacerIndex = 0;
-
-    connect(sessionTimer, SIGNAL(timeout()), this, SLOT(sessionTick()));
     connect(breathPacerTimer, SIGNAL(timeout()), this, SLOT(breathPacerTick()));
-
-    sessionTimer->start(1000);
+    breathPacerTick();
     breathPacerTimer->start(breathPacerSetting * 1000 / (BPTICKS * 2));
 
+    sessionTimer = new QTimer(this);
+    sessionTime = 0;
+    connect(sessionTimer, SIGNAL(timeout()), this, SLOT(sessionTick()));
     currentSession = new Session();
-    breathPacerTick();
+    sessionTick();
+    sessionTimer->start(1000);
 }
 
 // End the current session
@@ -374,16 +374,30 @@ void MainWindow::endSession() {
         sessionHistory.append(currentSession);
         currentSession = NULL;
     }
+    sessionTime = 0;
+    menuHistory.pop_back();
+    showHistoryMenu();
 }
 
 // Runs a session loop
 void MainWindow::sessionTick() {
-    // TODO: Session loop
+    int heartrate = hrSensor->getHeartRate(sessionTime);
+    if (heartrate == -1) {
+        return endSession();
+    }
+    currentSession->addHeartRate(heartrate);
+    displaySessionMetrics();
+    sessionTime++;
 }
 
 // Shows the end of session metrics
 void MainWindow::displaySessionMetrics() {
-    // TODO: Session metrics
+    setLength(sessionTime);
+    currentSession->plotCurrentData(ui->graph);
+    if (sessionTime % 5 == 0) {
+        setCoherenceScore(currentSession->calculateCoherence());
+        setAchievement(currentSession->getAchievement());
+    }
 }
 
 // Updates the breath pacer by incrementing/decrementing the lights

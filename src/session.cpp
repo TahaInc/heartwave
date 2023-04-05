@@ -1,23 +1,73 @@
 #include "session.h"
+#include <iostream>
 
 Session::Session()
 {
 
 }
 
-void Session::plotCurrentData(QCPGraph *) {
+void Session::plotCurrentData(QCustomPlot *plot) {
+    // Size the plot appropriately
+    // -63 seconds ago to 0 (just now)
+    plot->xAxis->setRangeLower(-63);
+    plot->xAxis->setRangeUpper(0);
+    //plot->xAxis->setLabel("Time (s)");
+    //plot->yAxis->setRangeLower(60);
+    //plot->yAxis->setRangeUpper(100);
+    //plot->yAxis->setLabel("Heart Rate (BPM)");
 
+    // Ensure that the plot has only one, empty graph
+    plot->clearGraphs();
+    QCPGraph *graph = plot->addGraph();
+    graph->setLineStyle(QCPGraph::lsLine);
+
+    // Graph the data
+    int dataStartIndex = qMax(0, hrData.size() - 64);
+    for (int i = dataStartIndex; i < hrData.size(); ++i) {
+        graph->addData(i - hrData.size(), hrData[i]);
+    }
+
+    // Rescale the Y axis to fit the input data.
+    //plot->graph()->rescaleValueAxis(true);
+    graph->rescaleValueAxis(false);
+
+    // Stretch the y axis a little to give the data some room to breathe
+    plot->yAxis->scaleRange(1.1, plot->yAxis->range().center());
+    // Update the UI
+    plot->replot();
 }
 
-void Session::plotAllData(QCPGraph *) {
+void Session::plotAllData(QCustomPlot *plot) {
+    // Ensure that the plot has only one, empty graph
+    plot->clearGraphs();
+    QCPGraph *graph = plot->addGraph();
+    graph->setLineStyle(QCPGraph::lsLine);
 
+    // Graph the data
+    for (int i = 0; i < hrData.size(); ++i) {
+        graph->addData(i, hrData[i]);
+    }
+
+    // Set the graph's axes to fit the bounds if the input data
+    graph->rescaleAxes();
+
+    // Stretch the y axis a little to give the data some room to breathe
+    plot->yAxis->scaleRange(1.1, plot->yAxis->range().center());
+    // Update the UI
+    plot->replot();
 }
 
 float Session::getAchievement() {
-    return 0;
+    float achievement = 0;
+
+    for (int i = 0; i < coherenceScores.size(); ++i) {
+        achievement += coherenceScores[i];
+    }
+
+    return achievement;
 }
 
-void Session::calculateCoherence() {
+float Session::calculateCoherence() {
     //For smaller amounts of data points, the score will vary wildly
 
     int maxIndex = 0;
@@ -72,4 +122,5 @@ void Session::calculateCoherence() {
 
     //Add the new coherence score to the list of coherence scores
     coherenceScores.push_back(score);
+    return score;
 }

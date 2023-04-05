@@ -11,14 +11,12 @@ public:
     Session();
 
     inline void addHeartRate(int hr) { hrData.push_back(hr); }
-    void plotCurrentData(QCPGraph *);
-    void plotAllData(QCPGraph *);
-    inline float getLastCoherenceScore() { return coherenceScores.last(); }
+    void plotCurrentData(QCustomPlot *);
+    void plotAllData(QCustomPlot *);
     float getAchievement();
+    float calculateCoherence();
 
 private:
-    void calculateCoherence();
-
     QVector<int> hrData;
     QVector<float> coherenceScores;
 };

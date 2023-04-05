@@ -47,6 +47,7 @@ private:
     int breathPacerIndex;
     int breathPacerSetting = 10;
     int challengeLevelSetting = 1;
+    int sessionTime = 0;
     void setCoherenceScore(float c);
     void setLength(float l);
     void setAchievement(float a);

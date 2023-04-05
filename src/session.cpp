@@ -74,21 +74,21 @@ float Session::calculateCoherence() {
     QVector<int> periods; //These are partial periods
 
     //Find the periods (assuming the maximums are the only values greater than both adjacent values, and same for minimums)
-    for(int i = 1; i < (hrData.length() - 1) && i < 65; i++){
+    for(int data = qMax(1, hrData.length() - 64); data < (hrData.length() - 1); data++){
         if(maxIndex == 0){
-            if(hrData[i] > previous && hrData[i] > hrData[i+1]){
-                maxIndex = i;
+            if(hrData[data] > previous && hrData[data] > hrData[data+1]){
+                maxIndex = data;
             }
-            if(hrData[i] != hrData[i+1]){
-                previous = hrData[i];
+            if(hrData[data] != hrData[data+1]){
+                previous = hrData[data];
             }
         }else{
-            if(hrData[i] > previous && hrData[i] > hrData[i+1]){
-                periods.push_back(i - maxIndex);
-                maxIndex = i;
+            if(hrData[data] > previous && hrData[data] > hrData[data+1]){
+                periods.push_back(data - maxIndex);
+                maxIndex = data;
             }
-            if(hrData[i] != hrData[i+1]){
-                previous = hrData[i];
+            if(hrData[data] != hrData[data+1]){
+                previous = hrData[data];
             }
         }
     }

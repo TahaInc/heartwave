@@ -1,6 +1,6 @@
 #include "session.h"
 
-Session::Session()
+Session::Session(const int challengeLevel) : challengeLevel(challengeLevel)
 {
 
 }

@@ -8,15 +8,18 @@
 class Session
 {
 public:
-    Session();
+    Session(int);
 
     inline void addHeartRate(int hr) { hrData.push_back(hr); }
     void plotCurrentData(QCustomPlot *);
     void plotAllData(QCustomPlot *);
     float getAchievement();
     float calculateCoherence();
+    inline int getChallengeLevel() const { return challengeLevel; }
 
 private:
+    const int challengeLevel;
+
     QVector<int> hrData;
     QVector<float> coherenceScores;
 };

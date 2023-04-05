@@ -359,7 +359,7 @@ void MainWindow::startSession() {
     sessionTimer = new QTimer(this);
     sessionTime = 0;
     connect(sessionTimer, SIGNAL(timeout()), this, SLOT(sessionTick()));
-    currentSession = new Session();
+    currentSession = new Session(challengeLevelSetting);
     sessionTick();
     sessionTimer->start(1000);
 }

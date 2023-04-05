@@ -1,5 +1,4 @@
 #include "session.h"
-#include <iostream>
 
 Session::Session()
 {

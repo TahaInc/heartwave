@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "menuitemstyle.h"
 #include "ui_mainwindow.h"
-#include <iostream>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -77,10 +77,7 @@ void MainWindow::startup() {
 
 // Shuts down the device
 void MainWindow::shutdown() {
-    delete batteryTimer;
-    delete timeTimer;
-    delete hrSensor;
-    delete ui->menu->itemDelegate();
+    if (currentSession) { endSession(); }
 
     ui->menuButton->setEnabled(false);
     ui->backButton->setEnabled(false);
@@ -126,6 +123,11 @@ void MainWindow::shutdown() {
 
     ui->screen->setStyleSheet(QString("background-color: " + GRAY));
     ui->coherenceLed->setStyleSheet(QString("background-color: " + GRAY));
+
+    delete batteryTimer;
+    delete timeTimer;
+    delete hrSensor;
+    delete ui->menu->itemDelegate();
 }
 
 // Shows the main menu

@@ -2,6 +2,8 @@
 #define HEARTRATESENSOR_H
 
 #include <QVector>
+#include <ctime>
+#include <QDebug>
 
 class HeartRateSensor
 {
@@ -11,7 +13,7 @@ public:
     int getHeartRate(int);
 
 private:
-    QVector<float> data;
+    QVector<int> data;
 };
 
 #endif // HEARTRATESENSOR_H

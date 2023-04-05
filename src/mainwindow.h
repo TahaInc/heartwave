@@ -50,7 +50,6 @@ private:
     void setCoherenceScore(float c);
     void setLength(float l);
     void setAchievement(float a);
-    void showHeartRateContact(bool h);
     void showSessionDisplay();
     void showHistoryMenu();
     void displaySessionMetrics();

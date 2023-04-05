@@ -77,6 +77,11 @@ void MainWindow::startup() {
 
 // Shuts down the device
 void MainWindow::shutdown() {
+    delete batteryTimer;
+    delete timeTimer;
+    delete hrSensor;
+    delete ui->menu->itemDelegate();
+
     ui->menuButton->setEnabled(false);
     ui->backButton->setEnabled(false);
     ui->selectButton->setEnabled(false);
@@ -362,6 +367,9 @@ void MainWindow::endSession() {
     sessionTimer->stop();
     breathPacerTimer->stop();
 
+    delete sessionTimer;
+    delete breathPacerTimer;
+
     if (currentSession) {
         sessionHistory.append(currentSession);
         currentSession = NULL;
@@ -373,6 +381,7 @@ void MainWindow::sessionTick() {
     // TODO: Session loop
 }
 
+// Shows the end of session metrics
 void MainWindow::displaySessionMetrics() {
     // TODO: Session metrics
 }
@@ -439,19 +448,6 @@ void MainWindow::setAchievement(float a) {
     ui->achievement->setText(QString::number(a));
 }
 
-// Takes a boolean and updates the hr contact visibilitty on the UI
-void MainWindow::showHeartRateContact(bool h) {
-    auto effect = new QGraphicsOpacityEffect(this);
-
-    if (h) {
-        effect->setOpacity(1);
-    } else {
-        effect->setOpacity(0.2);
-    }
-
-    ui->hrIcon->setGraphicsEffect(effect);
-}
-
 // Decrements the battery and updates the UI
 void MainWindow::updateBattery() {
     battery -= 1;
@@ -481,6 +477,8 @@ void MainWindow::reset() {
 
     menuHistory.clear();
     sessionHistory.clear();
+
+    qDeleteAll(sessionHistory);
 
     showMainMenu();
 }

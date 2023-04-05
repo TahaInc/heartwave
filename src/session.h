@@ -16,6 +16,10 @@ public:
     float getAchievement();
     float calculateCoherence();
     inline int getChallengeLevel() const { return challengeLevel; }
+    float getAverageCoherence();
+    int getChallengeLevel();
+    int getSessionLength();
+    void getCoherenceSpread(QVector<float>** intervals);
 
 private:
     const int challengeLevel;

@@ -60,6 +60,7 @@ void MainWindow::startup() {
     ui->graph->setVisible(true);
     ui->menu->setVisible(true);
     ui->menuLabel->setVisible(true);
+    ui->sumView->setVisible(false);
 
     for (int i=1; i<BPTICKS; ++i) {
         findChild<QLabel*>(QString("bp%1").arg(i))->setVisible(true);
@@ -116,6 +117,7 @@ void MainWindow::shutdown() {
     ui->graph->setVisible(false);
     ui->menu->setVisible(false);
     ui->menuLabel->setVisible(false);
+    ui->sumView->setVisible(false);
 
     for (int i=1; i<BPTICKS; ++i) {
         findChild<QLabel*>(QString("bp%1").arg(i))->setVisible(false);
@@ -137,6 +139,7 @@ void MainWindow::showMainMenu() {
     menuHistory.append(menuIndex);
 
     ui->menu->setVisible(true);
+    ui->sumView->setVisible(false);
     ui->menu->clear();
     ui->menu->addItem("Start new session");
     ui->menu->addItem("View history");
@@ -158,6 +161,7 @@ void MainWindow::showSessionDisplay() {
     menuHistory.append(menuIndex);
 
     ui->menu->setVisible(false);
+    ui->sumView->setVisible(false);
     ui->upButton->setEnabled(false);
     ui->rightButton->setEnabled(false);
     ui->downButton->setEnabled(false);
@@ -177,6 +181,7 @@ void MainWindow::showHistoryMenu() {
     menuHistory.append(menuIndex);
 
     ui->menu->setVisible(true);
+    ui->sumView->setVisible(false);
     ui->menu->clear();
     ui->upButton->setEnabled(true);
     ui->rightButton->setEnabled(true);
@@ -199,6 +204,7 @@ void MainWindow::showSettingsMenu() {
     menuHistory.append(menuIndex);
 
     ui->menu->setVisible(true);
+    ui->sumView->setVisible(false);
     ui->menu->clear();
     ui->upButton->setEnabled(true);
     ui->rightButton->setEnabled(true);
@@ -335,7 +341,19 @@ void MainWindow::backButton() {
 
         menuIndex = menuHistory.last();
         menuHistory.removeLast();
-
+        if (menuIndex == 0) {
+            showMainMenu();
+        } else if (menuIndex == 1) {
+            showHistoryMenu();
+        } else if (menuIndex == 2) {
+            showSettingsMenu();
+        } else if (menuIndex == 3) {
+            showSessionDisplay();
+        }
+    //There is only one item in menuHistory when returning from a session summary directly after a session
+    }else if(menuHistory.size() == 1){
+        menuIndex = menuHistory.last();
+        menuHistory.removeLast();
         if (menuIndex == 0) {
             showMainMenu();
         } else if (menuIndex == 1) {
@@ -378,7 +396,11 @@ void MainWindow::endSession() {
     }
     sessionTime = 0;
     menuHistory.pop_back();
-    showHistoryMenu();
+
+    //The following line of code is for returning to the history menu instead of immediately showing a session summary
+    //showHistoryMenu();
+
+    showSessionSummary(sessionHistory.length() - 1);
 }
 
 // Runs a session loop
@@ -426,7 +448,7 @@ void MainWindow::breathPacerTick() {
     breathPacerIndex = (breathPacerIndex + 1) % (BPTICKS * 2);
 }
 
-// Takes a float [0-1] and updates the coherence score on the UI
+// Takes a float [0-16] and updates the coherence score on the UI
 void MainWindow::setCoherenceScore(float c) {
     ui->coherence->setText(QString::number(c));
 
@@ -501,5 +523,40 @@ void MainWindow::reset() {
 
 // Displays the summary view for a session
 void MainWindow::showSessionSummary(int sessionIndex){
+    //Get the data to be displayed
+    float achievement = sessionHistory[sessionIndex]->getAchievement();
+    float averageCoherence = sessionHistory[sessionIndex]->getAverageCoherence();
+    int sessionLength = sessionHistory[sessionIndex]->getSessionLength();
+    int challengeLevel = sessionHistory[sessionIndex]->getChallengeLevel();
+    QVector<float>* coherenceSpread;
+    sessionHistory[sessionIndex]->getCoherenceSpread(&coherenceSpread);
 
+    //Set the labels
+    ui->menuLabel->setText("Session Summary");
+    ui->sumViewAverageCoherence->setText("<b>Average Coherence:</b> " + QString::number(averageCoherence));
+    if(coherenceSpread->length() >= 3){
+        ui->sumViewCoherenceSpread->setText("<b>Coherence Spread:</b> Low: " + QString::number((*coherenceSpread)[0] * 100) + "%  Med: " + QString::number((*coherenceSpread)[1] * 100)+ "%  High: " + QString::number((*coherenceSpread)[2] * 100) + "%");
+    }
+    ui->sumViewSessionLength->setText("<b>Session length:</b> " + QString::number(sessionLength) + " seconds");
+    if(challengeLevel == 1){
+        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Beginner");
+    } else if(challengeLevel == 2){
+        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Novice");
+    } else if(challengeLevel == 3){
+        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Intermediate");
+    } else if(challengeLevel == 4){
+        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Advanced");
+    }
+    ui->sumViewAchievementScore->setText("<b>Achievment Score:</b> " + QString::number(achievement));
+
+    //Make the summary screen visible
+    ui->sumView->setStyleSheet(QString("background-color: " + ALTGRAY));
+    ui->sumView->setVisible(true);
+
+    //Display the entire HRV graph
+    ui->sumViewGraph->setBackground(QBrush(QColor(ALTGRAY)));
+    sessionHistory[sessionIndex]->plotAllData(ui->sumViewGraph);
+
+    //Make sure the back button is enabled
+    ui->backButton->setEnabled(true);
 }

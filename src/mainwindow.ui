@@ -319,6 +319,7 @@
      <property name="font">
       <font>
        <family>Noto Sans Adlam</family>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -341,6 +342,7 @@
      <property name="font">
       <font>
        <family>Noto Sans Adlam</family>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -363,6 +365,7 @@
      <property name="font">
       <font>
        <family>Noto Sans Adlam</family>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -830,6 +833,106 @@ background-color: transparent;</string>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
+     <widget class="QFrame" name="sumView">
+      <property name="geometry">
+       <rect>
+        <x>-1</x>
+        <y>39</y>
+        <width>411</width>
+        <height>251</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="sumViewAchievementScore">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>391</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="sumViewAverageCoherence">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>391</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="sumViewChallengeLevel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>391</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="sumViewCoherenceSpread">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>391</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="sumViewSessionLength">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>90</y>
+         <width>391</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QCustomPlot" name="sumViewGraph" native="true">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>110</y>
+         <width>411</width>
+         <height>141</height>
+        </rect>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+      </widget>
+     </widget>
     </widget>
     <widget class="QLabel" name="menuLabel">
      <property name="geometry">

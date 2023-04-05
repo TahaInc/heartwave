@@ -392,7 +392,7 @@ void MainWindow::sessionTick() {
     sessionTime++;
 }
 
-// Shows the end of session metrics
+// Shows the session metrics
 void MainWindow::displaySessionMetrics() {
     setLength(sessionTime);
     currentSession->plotCurrentData(ui->graph);

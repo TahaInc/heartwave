@@ -332,7 +332,20 @@ void MainWindow::selectButton() {
 void MainWindow::backButton() {
     if (menuHistory.size() >= 2) {
         if (menuHistory.last() == 3) {
-            if (currentSession) { endSession(); }
+            if (currentSession) {
+                endSession();
+                menuIndex = menuHistory.last();
+                if (menuIndex == 0) {
+                    showMainMenu();
+                } else if (menuIndex == 1) {
+                    showHistoryMenu();
+                } else if (menuIndex == 2) {
+                    showSettingsMenu();
+                } else if (menuIndex == 3) {
+                    showSessionDisplay();
+                }
+                return;
+            }
         }
 
         menuHistory.removeLast();
@@ -353,7 +366,6 @@ void MainWindow::backButton() {
     //There is only one item in menuHistory when returning from a session summary directly after a session
     }else if(menuHistory.size() == 1){
         menuIndex = menuHistory.last();
-        menuHistory.removeLast();
         if (menuIndex == 0) {
             showMainMenu();
         } else if (menuIndex == 1) {

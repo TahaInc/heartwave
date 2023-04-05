@@ -498,3 +498,8 @@ void MainWindow::reset() {
 
     showMainMenu();
 }
+
+// Displays the summary view for a session
+void MainWindow::showSessionSummary(int sessionIndex){
+
+}

@@ -58,6 +58,7 @@ private:
     void startSession();
     void endSession();
     void reset();
+    void showSessionSummary(int sessionIndex);
 
 private slots:
     void startup();

@@ -133,3 +133,69 @@ float Session::calculateCoherence() {
     coherenceScores.push_back(score);
     return score;
 }
+
+//Calculates the average coherence score
+float Session::getAverageCoherence(){
+    float total = 0;
+    for(int i = 0; i < coherenceScores.length(); i++){
+        total += coherenceScores[i];
+    }
+
+    return (total / coherenceScores.length());
+}
+
+//Returns the challenge level
+int Session::getChallengeLevel(){
+    return challengeLevel;
+}
+
+//Gets the number of hrData readings (the size of the Vector)
+int Session::getSessionLength(){
+    return hrData.length();
+}
+
+//Returns the percentage of time spent in each coherence level
+void Session::getCoherenceSpread(QVector<float>** intervals){
+    float lowTime = 0;
+    float medTime = 0;
+    float highTime = 0;
+
+    for(int i = 0; i < coherenceScores.length(); i++){
+        //The following 2 if-statements of code has been taken from the setCoherenceScore() function in mainwindow.cpp (modified slightly)
+        //Get the bounds for the coherence levels based on the challenge level
+        int lower, upper;
+        if (challengeLevel == 1) {
+            lower = 0.5;
+            upper = 0.9;
+        } else if (challengeLevel == 2) {
+            lower = 0.6;
+            upper = 2.1;
+        } else if (challengeLevel == 3) {
+            lower = 1.8;
+            upper = 4;
+        } else {
+            lower = 4;
+            upper = 6;
+        }
+
+        //Count the coherence score for the corresponding coherence level
+        if (coherenceScores[i] >= lower && coherenceScores[i] <= upper) {
+            medTime += 1;
+        } else if (coherenceScores[i] > upper) {
+            highTime += 1;
+        } else {
+            lowTime += 1;
+        }
+    }
+
+    //Create the vector to be returned
+    QVector<float>* spread = new QVector<float>();
+    if(coherenceScores.length() > 0){
+        spread->append(lowTime / coherenceScores.length());
+        spread->append(medTime / coherenceScores.length());
+        spread->append(highTime / coherenceScores.length());
+    }
+
+    //Return the vector (contains the percentage of time spent in each coherence level)
+    *intervals = spread;
+}

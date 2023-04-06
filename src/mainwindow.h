@@ -52,6 +52,8 @@ private:
     void setCoherenceScore(float c);
     void setLength(float l);
     void setAchievement(float a);
+    void receivingHeartData();
+    void noHeartData();
     void showSessionDisplay();
     void showHistoryMenu();
     void displaySessionMetrics();

@@ -419,9 +419,14 @@ void MainWindow::endSession() {
 void MainWindow::sessionTick() {
     int heartrate = hrSensor->getHeartRate(sessionTime);
     if (heartrate == -1) {
-        return endSession();
+        noHeartData();
+        currentSession->addHeartRate(0);
+//        the following line of code ends the session if there is no more data
+//        return endSession();
+    } else {
+        receivingHeartData();
+        currentSession->addHeartRate(heartrate);
     }
-    currentSession->addHeartRate(heartrate);
     displaySessionMetrics();
     sessionTime++;
 }
@@ -496,6 +501,14 @@ void MainWindow::setLength(float l) {
 // Takes a float [0-1] and updates the coherence score on the UI
 void MainWindow::setAchievement(float a) {
     ui->achievement->setText(QString::number(a));
+}
+
+void MainWindow::receivingHeartData(){
+    ui->hrIcon->setPixmap(QPixmap(":/resources/img/hr_on.png"));
+}
+
+void MainWindow::noHeartData(){
+    ui->hrIcon->setPixmap(QPixmap(":/resources/img/hr.png"));
 }
 
 // Decrements the battery and updates the UI

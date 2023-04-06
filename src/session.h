@@ -4,6 +4,8 @@
 #include "qcustomplot.h"
 #include <QVector>
 #include <QtMath>
+#include <QString>
+#include <ctime>
 
 class Session
 {
@@ -15,10 +17,12 @@ public:
     void plotAllData(QCustomPlot *);
     float getAchievement();
     float calculateCoherence();
+    QString getName();
     inline int getChallengeLevel() const { return challengeLevel; }
 
 private:
     const int challengeLevel;
+    QString name;
 
     QVector<int> hrData;
     QVector<float> coherenceScores;

@@ -48,6 +48,7 @@ private:
     int breathPacerSetting = 10;
     int challengeLevelSetting = 1;
     int sessionTime = 0;
+    bool historyViewDelete;
     void setCoherenceScore(float c);
     void setLength(float l);
     void setAchievement(float a);

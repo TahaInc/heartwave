@@ -2,7 +2,17 @@
 
 Session::Session(const int challengeLevel) : challengeLevel(challengeLevel)
 {
+    time_t currentTime;
+    char timeString[100];
 
+    time(&currentTime);
+    strftime(timeString, 50, "%m/%d @ %I:%M%P", localtime(&currentTime));
+
+    name = QString(timeString);
+}
+
+QString Session::getName() {
+    return name;
 }
 
 void Session::plotCurrentData(QCustomPlot *plot) {

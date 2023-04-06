@@ -175,6 +175,7 @@ void MainWindow::showHistoryMenu() {
     menuIndex = 1;
     menuItemIndex = 0;
     menuHistory.append(menuIndex);
+    historyViewDelete = false;
 
     ui->menu->setVisible(true);
     ui->menu->clear();
@@ -185,8 +186,11 @@ void MainWindow::showHistoryMenu() {
     ui->menuLabel->setText("History");
 
     for(int i=0; i<sessionHistory.count(); ++i) {
-        // TODO: For each session add an item
-        // ui->menu->addItem(sessionHistory[i]->getName());
+         if (i == 0) {
+             ui->menu->addItem("<span style='white-space: pre;'><u>" + sessionHistory[i]->getName() + "</u>                      ⌫</span>");
+         } else {
+             ui->menu->addItem("<span style='white-space: pre;'>" + sessionHistory[i]->getName() + "                      ⌫</span>");
+         }
     }
 
     ui->menu->setCurrentRow(menuItemIndex);
@@ -223,16 +227,34 @@ void MainWindow::showSettingsMenu() {
 
 // Up button is clicked
 void MainWindow::upButton() {
+    if (menuIndex == 1 && sessionHistory.count() > 1) {
+        historyViewDelete = false;
+        ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'>" + sessionHistory[menuItemIndex]->getName() + "                   ⌫</span>");
+    }
+
     menuItemIndex = (menuItemIndex - 1);
     if (menuItemIndex < 0) { menuItemIndex = ui->menu->count() - 1; }
     ui->menu->setCurrentRow(menuItemIndex);
+
+    if (menuIndex == 1 && sessionHistory.count() > 1) {
+        ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
+    }
 }
 
 // Down button is clicked
 void MainWindow::downButton() {
+    if (menuIndex == 1 && sessionHistory.count() > 1) {
+        historyViewDelete = false;
+        ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'>" + sessionHistory[menuItemIndex]->getName() + "                   ⌫</span>");
+    }
+
     menuItemIndex = (menuItemIndex + 1);
     if (menuItemIndex > ui->menu->count() - 1) { menuItemIndex = 0; }
     ui->menu->setCurrentRow(menuItemIndex);
+
+    if (menuIndex == 1 && sessionHistory.count() > 1) {
+        ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
+    }
 }
 
 // Right button is clicked
@@ -265,6 +287,9 @@ void MainWindow::rightButton() {
                 ui->menu->item(1)->setText("Breath Pacer interval: <b>" + QString::number(breathPacerSetting) + "s</b>");
             }
         }
+    } else if (menuIndex == 1) {
+        historyViewDelete = true;
+        ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'>" + sessionHistory[menuItemIndex]->getName() + "                   <u>⌫</u></span>");
     }
 }
 
@@ -298,6 +323,9 @@ void MainWindow::leftButton() {
                 ui->menu->item(1)->setText("Breath Pacer interval: <b>" + QString::number(breathPacerSetting) + "s</b>");
             }
         }
+    } else if (menuIndex == 1) {
+        historyViewDelete = false;
+        ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
     }
 }
 
@@ -312,7 +340,11 @@ void MainWindow::selectButton() {
             showSettingsMenu();
         }
     } else if (menuIndex == 1) {
-        // TODO: select corresponding history log with sessionHistory[menuItemIndex]
+        if (historyViewDelete) {
+            // TODO: Delete session with sessionHistory[menuItemIndex]
+        } else {
+            showSessionSummary(menuItemIndex);
+        }
     } else if (menuIndex == 2) {
         if (menuItemIndex == 2) {
             reset();
@@ -361,7 +393,7 @@ void MainWindow::startSession() {
     connect(sessionTimer, SIGNAL(timeout()), this, SLOT(sessionTick()));
     currentSession = new Session(challengeLevelSetting);
     sessionTick();
-    sessionTimer->start(1000);
+    sessionTimer->start(10);
 }
 
 // End the current session
@@ -376,6 +408,8 @@ void MainWindow::endSession() {
         sessionHistory.append(currentSession);
         currentSession = NULL;
     }
+
+    setCoherenceScore(-1);
     sessionTime = 0;
     menuHistory.pop_back();
     showHistoryMenu();
@@ -428,6 +462,12 @@ void MainWindow::breathPacerTick() {
 
 // Takes a float [0-1] and updates the coherence score on the UI
 void MainWindow::setCoherenceScore(float c) {
+
+    if (c < 0) {
+        ui->coherenceLed->setStyleSheet(QString("background-color: " + GRAY));
+        return;
+    }
+
     ui->coherence->setText(QString::number(c));
 
     int lower, upper;

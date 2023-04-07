@@ -187,14 +187,14 @@ void MainWindow::showHistoryMenu() {
     ui->upButton->setEnabled(true);
     ui->rightButton->setEnabled(true);
     ui->downButton->setEnabled(true);
-    ui->leftButton->setEnabled(true);
+    ui->leftButton->setEnabled(false);
     ui->menuLabel->setText("History");
 
     for(int i=0; i<sessionHistory.count(); ++i) {
          if (i == 0) {
-             ui->menu->addItem("<span style='white-space: pre;'><u>" + sessionHistory[i]->getName() + "</u>                      ⌫</span>");
+             ui->menu->addItem("<span style='white-space: pre;'><u>" + sessionHistory[i]->getName() + "</u>                   ⌫</span>");
          } else {
-             ui->menu->addItem("<span style='white-space: pre;'>" + sessionHistory[i]->getName() + "                      ⌫</span>");
+             ui->menu->addItem("<span style='white-space: pre;'>" + sessionHistory[i]->getName() + "                   ⌫</span>");
          }
     }
 
@@ -243,7 +243,19 @@ void MainWindow::upButton() {
     ui->menu->setCurrentRow(menuItemIndex);
 
     if (menuIndex == 1 && sessionHistory.count() > 1) {
+        ui->rightButton->setEnabled(true);
+        ui->leftButton->setEnabled(false);
         ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
+    }
+
+    if (menuIndex == 2) {
+        if (menuItemIndex == 2) {
+            ui->rightButton->setEnabled(false);
+            ui->leftButton->setEnabled(false);
+        } else {
+            ui->rightButton->setEnabled(true);
+            ui->leftButton->setEnabled(true);
+        }
     }
 }
 
@@ -259,7 +271,19 @@ void MainWindow::downButton() {
     ui->menu->setCurrentRow(menuItemIndex);
 
     if (menuIndex == 1 && sessionHistory.count() > 1) {
+        ui->rightButton->setEnabled(true);
+        ui->leftButton->setEnabled(false);
         ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
+    }
+
+    if (menuIndex == 2) {
+        if (menuItemIndex == 2) {
+            ui->rightButton->setEnabled(false);
+            ui->leftButton->setEnabled(false);
+        } else {
+            ui->rightButton->setEnabled(true);
+            ui->leftButton->setEnabled(true);
+        }
     }
 }
 
@@ -295,6 +319,8 @@ void MainWindow::rightButton() {
         }
     } else if (menuIndex == 1) {
         historyViewDelete = true;
+        ui->rightButton->setEnabled(false);
+        ui->leftButton->setEnabled(true);
         ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'>" + sessionHistory[menuItemIndex]->getName() + "                   <u>⌫</u></span>");
     }
 }
@@ -331,6 +357,8 @@ void MainWindow::leftButton() {
         }
     } else if (menuIndex == 1) {
         historyViewDelete = false;
+        ui->rightButton->setEnabled(true);
+        ui->leftButton->setEnabled(false);
         ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
     }
 }
@@ -347,7 +375,22 @@ void MainWindow::selectButton() {
         }
     } else if (menuIndex == 1) {
         if (historyViewDelete) {
-            // TODO: Delete session with sessionHistory[menuItemIndex]
+            delete sessionHistory[menuItemIndex];
+            sessionHistory.removeAt(menuItemIndex);
+            ui->menu->takeItem(menuItemIndex);
+            historyViewDelete = false;
+
+            menuItemIndex = (menuItemIndex - 1);
+            if (menuItemIndex < 0) { menuItemIndex = 0; }
+
+            if (sessionHistory.count() > 0) {
+                ui->rightButton->setEnabled(true);
+                ui->leftButton->setEnabled(false);
+                ui->menu->setCurrentRow(menuItemIndex);
+                ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
+            } else {
+                showMainMenu();
+            }
         } else {
             showSessionSummary(menuItemIndex);
         }
@@ -356,28 +399,22 @@ void MainWindow::selectButton() {
             reset();
         }
     } else if (menuIndex == 3) {
-        if (currentSession) { endSession(); }
+        if (currentSession) {
+            endSession();
+            showSessionSummary(0);
+        } else {
+            showHistoryMenu();
+        }
+    } else if (menuIndex == 4) {
+        showHistoryMenu();
     }
 }
 
 // Back button is clicked
 void MainWindow::backButton() {
     if (menuHistory.size() >= 2) {
-        if (menuHistory.last() == 3) {
-            if (currentSession) {
-                endSession();
-                menuIndex = menuHistory.last();
-                if (menuIndex == 0) {
-                    showMainMenu();
-                } else if (menuIndex == 1) {
-                    showHistoryMenu();
-                } else if (menuIndex == 2) {
-                    showSettingsMenu();
-                } else if (menuIndex == 3) {
-                    showSessionDisplay();
-                }
-                return;
-            }
+        if (menuHistory.last() == 3 && currentSession) {
+            endSession();
         }
 
         menuHistory.removeLast();
@@ -386,26 +423,15 @@ void MainWindow::backButton() {
 
         menuIndex = menuHistory.last();
         menuHistory.removeLast();
+
         if (menuIndex == 0) {
             showMainMenu();
         } else if (menuIndex == 1) {
             showHistoryMenu();
         } else if (menuIndex == 2) {
             showSettingsMenu();
-        } else if (menuIndex == 3) {
-            showSessionDisplay();
-        }
-    //There is only one item in menuHistory when returning from a session summary directly after a session
-    }else if(menuHistory.size() == 1){
-        menuIndex = menuHistory.last();
-        if (menuIndex == 0) {
+        } else if (menuIndex == 3 || menuIndex == 4) {
             showMainMenu();
-        } else if (menuIndex == 1) {
-            showHistoryMenu();
-        } else if (menuIndex == 2) {
-            showSettingsMenu();
-        } else if (menuIndex == 3) {
-            showSessionDisplay();
         }
     }
 }
@@ -423,7 +449,7 @@ void MainWindow::startSession() {
     connect(sessionTimer, SIGNAL(timeout()), this, SLOT(sessionTick()));
     currentSession = new Session(challengeLevelSetting);
     sessionTick();
-    sessionTimer->start(10);
+    sessionTimer->start(1000);
 }
 
 // End the current session
@@ -435,18 +461,12 @@ void MainWindow::endSession() {
     delete breathPacerTimer;
 
     if (currentSession) {
-        sessionHistory.append(currentSession);
+        sessionHistory.prepend(currentSession);
         currentSession = NULL;
     }
 
     setCoherenceScore(-1);
     sessionTime = 0;
-    menuHistory.pop_back();
-
-    //The following line of code is for returning to the history menu instead of immediately showing a session summary
-    //showHistoryMenu();
-
-    showSessionSummary(sessionHistory.length() - 1);
 }
 
 // Runs a session loop
@@ -455,8 +475,6 @@ void MainWindow::sessionTick() {
     if (heartrate == -1) {
         noHeartData();
         currentSession->addHeartRate(0);
-//        the following line of code ends the session if there is no more data
-//        return endSession();
     } else {
         receivingHeartData();
         currentSession->addHeartRate(heartrate);
@@ -588,6 +606,15 @@ void MainWindow::reset() {
 
 // Displays the summary view for a session
 void MainWindow::showSessionSummary(int sessionIndex){
+    menuIndex = 4;
+    menuHistory.append(menuIndex);
+
+    ui->menu->setVisible(false);
+    ui->upButton->setEnabled(false);
+    ui->rightButton->setEnabled(false);
+    ui->downButton->setEnabled(false);
+    ui->leftButton->setEnabled(false);
+
     //Get the data to be displayed
     float achievement = sessionHistory[sessionIndex]->getAchievement();
     float averageCoherence = sessionHistory[sessionIndex]->getAverageCoherence();

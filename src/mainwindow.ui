@@ -836,10 +836,10 @@ background-color: transparent;</string>
      <widget class="QFrame" name="sumView">
       <property name="geometry">
        <rect>
-        <x>-1</x>
-        <y>39</y>
-        <width>411</width>
-        <height>251</height>
+        <x>9</x>
+        <y>49</y>
+        <width>391</width>
+        <height>231</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -853,7 +853,7 @@ background-color: transparent;</string>
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>391</width>
+         <width>381</width>
          <height>17</height>
         </rect>
        </property>
@@ -866,7 +866,7 @@ background-color: transparent;</string>
         <rect>
          <x>10</x>
          <y>30</y>
-         <width>391</width>
+         <width>371</width>
          <height>17</height>
         </rect>
        </property>
@@ -879,7 +879,7 @@ background-color: transparent;</string>
         <rect>
          <x>10</x>
          <y>50</y>
-         <width>391</width>
+         <width>371</width>
          <height>17</height>
         </rect>
        </property>
@@ -892,7 +892,7 @@ background-color: transparent;</string>
         <rect>
          <x>10</x>
          <y>70</y>
-         <width>391</width>
+         <width>371</width>
          <height>17</height>
         </rect>
        </property>
@@ -905,7 +905,7 @@ background-color: transparent;</string>
         <rect>
          <x>10</x>
          <y>90</y>
-         <width>391</width>
+         <width>371</width>
          <height>17</height>
         </rect>
        </property>
@@ -921,8 +921,8 @@ background-color: transparent;</string>
         <rect>
          <x>0</x>
          <y>110</y>
-         <width>411</width>
-         <height>141</height>
+         <width>381</width>
+         <height>121</height>
         </rect>
        </property>
        <property name="autoFillBackground">
@@ -990,8 +990,8 @@ background-color: transparent;</string>
     <zorder>battery</zorder>
     <zorder>time</zorder>
     <zorder>line</zorder>
-    <zorder>clickPrevent</zorder>
     <zorder>menuLabel</zorder>
+    <zorder>clickPrevent</zorder>
    </widget>
    <widget class="QLabel" name="coherenceLed">
     <property name="geometry">

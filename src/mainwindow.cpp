@@ -449,7 +449,7 @@ void MainWindow::startSession() {
     connect(sessionTimer, SIGNAL(timeout()), this, SLOT(sessionTick()));
     currentSession = new Session(challengeLevelSetting);
     sessionTick();
-    sessionTimer->start(100);
+    sessionTimer->start(1000);
 }
 
 // End the current session

@@ -317,7 +317,7 @@ void MainWindow::rightButton() {
                 ui->menu->item(1)->setText("Breath Pacer interval: <b>" + QString::number(breathPacerSetting) + "s</b>");
             }
         }
-    } else if (menuIndex == 1) {
+    } else if (menuIndex == 1 && sessionHistory.count() > 0) {
         historyViewDelete = true;
         ui->rightButton->setEnabled(false);
         ui->leftButton->setEnabled(true);
@@ -355,7 +355,7 @@ void MainWindow::leftButton() {
                 ui->menu->item(1)->setText("Breath Pacer interval: <b>" + QString::number(breathPacerSetting) + "s</b>");
             }
         }
-    } else if (menuIndex == 1) {
+    } else if (menuIndex == 1 && sessionHistory.count() > 0) {
         historyViewDelete = false;
         ui->rightButton->setEnabled(true);
         ui->leftButton->setEnabled(false);
@@ -373,7 +373,7 @@ void MainWindow::selectButton() {
         } else if (menuItemIndex == 2) {
             showSettingsMenu();
         }
-    } else if (menuIndex == 1) {
+    } else if (menuIndex == 1 && sessionHistory.count() > 0) {
         if (historyViewDelete) {
             delete sessionHistory[menuItemIndex];
             sessionHistory.removeAt(menuItemIndex);
@@ -449,7 +449,7 @@ void MainWindow::startSession() {
     connect(sessionTimer, SIGNAL(timeout()), this, SLOT(sessionTick()));
     currentSession = new Session(challengeLevelSetting);
     sessionTick();
-    sessionTimer->start(1000);
+    sessionTimer->start(100);
 }
 
 // End the current session
@@ -474,12 +474,12 @@ void MainWindow::sessionTick() {
     int heartrate = hrSensor->getHeartRate(sessionTime);
     if (heartrate == -1) {
         noHeartData();
-        currentSession->addHeartRate(0);
     } else {
         receivingHeartData();
         currentSession->addHeartRate(heartrate);
+        displaySessionMetrics();
     }
-    displaySessionMetrics();
+
     sessionTime++;
 }
 

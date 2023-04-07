@@ -648,7 +648,4 @@ void MainWindow::showSessionSummary(int sessionIndex){
     //Display the entire HRV graph
     ui->sumViewGraph->setBackground(QBrush(QColor(ALTGRAY)));
     sessionHistory[sessionIndex]->plotAllData(ui->sumViewGraph);
-
-    //Make sure the back button is enabled
-    ui->backButton->setEnabled(true);
 }

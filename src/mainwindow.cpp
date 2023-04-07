@@ -185,9 +185,15 @@ void MainWindow::showHistoryMenu() {
     ui->sumView->setVisible(false);
     ui->menu->clear();
     ui->upButton->setEnabled(true);
-    ui->rightButton->setEnabled(true);
     ui->downButton->setEnabled(true);
     ui->leftButton->setEnabled(false);
+
+    if (sessionHistory.count() > 0) {
+        ui->rightButton->setEnabled(true);
+    } else {
+        ui->rightButton->setEnabled(false);
+    }
+
     ui->menuLabel->setText("History");
 
     for(int i=0; i<sessionHistory.count(); ++i) {

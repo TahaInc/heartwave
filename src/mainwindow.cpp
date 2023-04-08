@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "menuitemstyle.h"
 #include "ui_mainwindow.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,6 +14,32 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    if (currentSession) {
+        if (sessionTimer){
+            delete sessionTimer;
+        }
+        if (breathPacerTimer){
+            delete breathPacerTimer;
+        }
+    }
+    if (batteryTimer){
+        delete batteryTimer;
+    }
+    if (timeTimer){
+        delete timeTimer;
+    }
+
+    qDeleteAll(sessionHistory);
+
+    if (currentSession) {
+        delete currentSession;
+    }
+    if (hrSensor){
+        delete hrSensor;
+    }
+    if (ui->menu->itemDelegate()) {
+        delete ui->menu->itemDelegate();
+    }
     delete ui;
 }
 
@@ -494,7 +521,12 @@ void MainWindow::displaySessionMetrics() {
     setLength(sessionTime);
     currentSession->plotCurrentData(ui->graph);
     if (sessionTime % 5 == 0) {
-        setCoherenceScore(currentSession->calculateCoherence());
+        float lastCoherence = currentSession->getLastCoherence();
+        float newCoherence = currentSession->calculateCoherence();
+        if (lastCoherence != -1 && getCoherenceLevel(lastCoherence) != getCoherenceLevel(newCoherence)) {
+            std::cout << "BEEP!" << std::endl;
+        }
+        setCoherenceScore(newCoherence);
         setAchievement(currentSession->getAchievement());
     }
 }
@@ -523,6 +555,31 @@ void MainWindow::breathPacerTick() {
     breathPacerIndex = (breathPacerIndex + 1) % (BPTICKS * 2);
 }
 
+int MainWindow::getCoherenceLevel(float c) {
+    float lower, upper;
+    if (challengeLevelSetting == 1) {
+        lower = 0.5;
+        upper = 0.9;
+    } else if (challengeLevelSetting == 2) {
+        lower = 0.6;
+        upper = 2.1;
+    } else if (challengeLevelSetting == 3) {
+        lower = 1.8;
+        upper = 4;
+    } else {
+        lower = 4;
+        upper = 6;
+    }
+
+    if (c < lower) {
+        return 0;
+    } else if (c < upper) {
+        return 1;
+    } else {
+        return 2;
+    }
+}
+
 // Takes a float [0-16] and updates the coherence score on the UI
 void MainWindow::setCoherenceScore(float c) {
 
@@ -533,27 +590,14 @@ void MainWindow::setCoherenceScore(float c) {
 
     ui->coherence->setText(QString::number(c));
 
-    int lower, upper;
-    if (challengeLevelSetting == 1) {
-        lower = 0.5;
-        upper = 0.9;
-    } else if (challengeLevelSetting == 2) {
-        lower = 0.6;
-        upper = 2.1;
-    } else if (challengeLevelSetting == 3) {
-        lower = 1.8;
-        upper = 4;
-    } else if (challengeLevelSetting == 4) {
-        lower = 4;
-        upper = 6;
-    }
+    int score = getCoherenceLevel(c);
 
-    if (c >= lower && c <= upper) {
-        ui->coherenceLed->setStyleSheet(QString("background-color: " + BLUE));
-    } else if (c > upper) {
-        ui->coherenceLed->setStyleSheet(QString("background-color: " + GREEN));
-    } else if (c < lower) {
+    if (score == 0) {
         ui->coherenceLed->setStyleSheet(QString("background-color: " + RED));
+    } else if (score == 1) {
+        ui->coherenceLed->setStyleSheet(QString("background-color: " + BLUE));
+    } else {
+        ui->coherenceLed->setStyleSheet(QString("background-color: " + GREEN));
     }
 }
 
@@ -626,14 +670,14 @@ void MainWindow::showSessionSummary(int sessionIndex){
     float averageCoherence = sessionHistory[sessionIndex]->getAverageCoherence();
     int sessionLength = sessionHistory[sessionIndex]->getSessionLength();
     int challengeLevel = sessionHistory[sessionIndex]->getChallengeLevel();
-    QVector<float>* coherenceSpread;
-    sessionHistory[sessionIndex]->getCoherenceSpread(&coherenceSpread);
+    QVector<float> coherenceSpread;
+    sessionHistory[sessionIndex]->getCoherenceSpread(coherenceSpread);
 
     //Set the labels
     ui->menuLabel->setText("Session Summary");
     ui->sumViewAverageCoherence->setText("<b>Average Coherence:</b> " + QString::number(averageCoherence));
-    if(coherenceSpread->length() >= 3){
-        ui->sumViewCoherenceSpread->setText("<b>Coherence Spread:</b> Low: " + QString::number((*coherenceSpread)[0] * 100) + "%  Med: " + QString::number((*coherenceSpread)[1] * 100)+ "%  High: " + QString::number((*coherenceSpread)[2] * 100) + "%");
+    if(coherenceSpread.length() >= 3){
+        ui->sumViewCoherenceSpread->setText("<b>Coherence Spread:</b> Low: " + QString::number(coherenceSpread[0] * 100) + "%  Med: " + QString::number(coherenceSpread[1] * 100)+ "%  High: " + QString::number(coherenceSpread[2] * 100) + "%");
     }
     ui->sumViewSessionLength->setText("<b>Session length:</b> " + QString::number(sessionLength) + " seconds");
     if(challengeLevel == 1){

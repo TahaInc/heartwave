@@ -1,4 +1,5 @@
 #include "session.h"
+#include <iostream>
 
 Session::Session(const int challengeLevel) : challengeLevel(challengeLevel)
 {
@@ -11,7 +12,7 @@ Session::Session(const int challengeLevel) : challengeLevel(challengeLevel)
     name = QString(timeString);
 }
 
-QString Session::getName() {
+QString &Session::getName() {
     return name;
 }
 
@@ -74,6 +75,13 @@ float Session::getAchievement() {
     }
 
     return achievement;
+}
+
+float Session::getLastCoherence() {
+    if (coherenceScores.size() > 0) {
+        return coherenceScores.last();
+    }
+    return -1;
 }
 
 float Session::calculateCoherence() {
@@ -155,7 +163,7 @@ int Session::getSessionLength(){
 }
 
 //Returns the percentage of time spent in each coherence level
-void Session::getCoherenceSpread(QVector<float>** intervals){
+void Session::getCoherenceSpread(QVector<float> &intervals){
     float lowTime = 0;
     float medTime = 0;
     float highTime = 0;
@@ -188,14 +196,11 @@ void Session::getCoherenceSpread(QVector<float>** intervals){
         }
     }
 
+    intervals.clear();
     //Create the vector to be returned
-    QVector<float>* spread = new QVector<float>();
     if(coherenceScores.length() > 0){
-        spread->append(lowTime / coherenceScores.length());
-        spread->append(medTime / coherenceScores.length());
-        spread->append(highTime / coherenceScores.length());
+        intervals.append(lowTime / coherenceScores.length());
+        intervals.append(medTime / coherenceScores.length());
+        intervals.append(highTime / coherenceScores.length());
     }
-
-    //Return the vector (contains the percentage of time spent in each coherence level)
-    *intervals = spread;
 }

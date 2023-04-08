@@ -16,13 +16,14 @@ public:
     void plotCurrentData(QCustomPlot *);
     void plotAllData(QCustomPlot *);
     float getAchievement();
+    float getLastCoherence();
     float calculateCoherence();
-    QString getName();
+    QString &getName();
     inline int getChallengeLevel() const { return challengeLevel; }
     float getAverageCoherence();
     int getChallengeLevel();
     int getSessionLength();
-    void getCoherenceSpread(QVector<float>** intervals);
+    void getCoherenceSpread(QVector<float> &intervals);
 
 private:
     const int challengeLevel;

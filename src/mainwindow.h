@@ -49,6 +49,7 @@ private:
     int challengeLevelSetting = 1;
     int sessionTime = 0;
     bool historyViewDelete;
+    int getCoherenceLevel(float);
     void setCoherenceScore(float c);
     void setLength(float l);
     void setAchievement(float a);

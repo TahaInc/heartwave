@@ -8,7 +8,7 @@
 class HeartRateSensor
 {
 public:
-    HeartRateSensor();
+    HeartRateSensor(int ds=-1);
 
     int getHeartRate(int);
 

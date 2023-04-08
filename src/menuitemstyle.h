@@ -8,38 +8,41 @@
 
 #define FONTSIZE 18
 
-class MenuItemStyle : public QStyledItemDelegate {
+// An item delegate to paint HTML into the menu list items
+class MenuItemStyle: public QStyledItemDelegate {
 
-public:
-  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+  public: void paint(QPainter * painter,
+    const QStyleOptionViewItem & option,
+      const QModelIndex & index) const {
     QStyleOptionViewItem options = option;
-    initStyleOption(&options, index);
+    initStyleOption( & options, index);
 
-    painter->save();
+    painter -> save();
 
     QTextDocument doc;
     doc.setHtml(options.text);
     doc.setDefaultFont(QFont("Noto Sans", FONTSIZE));
 
     options.text = "";
-    options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter);
+    options.widget -> style() -> drawControl(QStyle::CE_ItemViewItem, & options, painter);
 
-    painter->translate(options.rect.left(), options.rect.top());
+    painter -> translate(options.rect.left(), options.rect.top());
     QRectF clip(0, 0, options.rect.width(), doc.size().height());
 
     QAbstractTextDocumentLayout::PaintContext ctx;
-    if (option.state & QStyle::State_Selected){
-        ctx.palette.setColor(QPalette::Text, QColor("white"));
+    if (option.state & QStyle::State_Selected) {
+      ctx.palette.setColor(QPalette::Text, QColor("white"));
     }
     ctx.clip = clip;
 
-    doc.documentLayout()->draw(painter, ctx);
-    painter->restore();
+    doc.documentLayout() -> draw(painter, ctx);
+    painter -> restore();
   }
 
-  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+  QSize sizeHint(const QStyleOptionViewItem & option,
+    const QModelIndex & index) const {
     QStyleOptionViewItem options = option;
-    initStyleOption(&options, index);
+    initStyleOption( & options, index);
 
     QTextDocument text;
     text.setHtml(options.text);

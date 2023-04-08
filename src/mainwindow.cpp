@@ -14,44 +14,30 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    if (currentSession) {
-        if (sessionTimer){
-            delete sessionTimer;
-        }
-        if (breathPacerTimer){
-            delete breathPacerTimer;
-        }
-    }
-    if (batteryTimer){
-        delete batteryTimer;
-    }
-    if (timeTimer){
-        delete timeTimer;
-    }
-
+    // Deallocate all memory
     qDeleteAll(sessionHistory);
-
     if (currentSession) {
         delete currentSession;
+        if (sessionTimer){ delete sessionTimer; }
+        if (breathPacerTimer){ delete breathPacerTimer; }
+        if (hrSensor){ delete hrSensor; }
     }
-    if (hrSensor){
-        delete hrSensor;
-    }
-    if (ui->menu->itemDelegate()) {
-        delete ui->menu->itemDelegate();
-    }
+    if (batteryTimer){ delete batteryTimer; }
+    if (timeTimer){ delete timeTimer; }
+    if (ui->menu->itemDelegate()) { delete ui->menu->itemDelegate(); }
     delete ui;
 }
 
 // Starts up the device
 void MainWindow::startup() {
+    // Initialize device variables
     battery = 100;
     batteryTimer = new QTimer(this);
     timeTimer = new QTimer(this);
-    hrSensor = new HeartRateSensor();
     currentSession = NULL;
     menuHistory.clear();
 
+    // Enable UI buttons
     ui->menuButton->setEnabled(true);
     ui->backButton->setEnabled(true);
     ui->selectButton->setEnabled(true);
@@ -59,8 +45,8 @@ void MainWindow::startup() {
     ui->rightButton->setEnabled(true);
     ui->downButton->setEnabled(true);
     ui->leftButton->setEnabled(true);
-    ui->battery->setText(QString::number(battery) + "%");
 
+    // Connect UI buttons and timers to corresponding slots
     disconnect(ui->powerButton, SIGNAL(clicked(bool)), 0, 0);
     connect(ui->powerButton, SIGNAL(clicked(bool)), this, SLOT(shutdown()));
     connect(batteryTimer, SIGNAL(timeout()), this, SLOT(updateBattery()));
@@ -73,6 +59,7 @@ void MainWindow::startup() {
     connect(ui->leftButton, SIGNAL(clicked(bool)), this, SLOT(leftButton()));
     connect(ui->selectButton, SIGNAL(clicked(bool)), this, SLOT(selectButton()));
 
+    // Show screen elements
     ui->battery->setVisible(true);
     ui->batteryIcon->setVisible(true);
     ui->time->setVisible(true);
@@ -88,6 +75,7 @@ void MainWindow::startup() {
     ui->menu->setVisible(true);
     ui->menuLabel->setVisible(true);
     ui->sumView->setVisible(false);
+    ui->battery->setText(QString::number(battery) + "%");
 
     for (int i=1; i<BPTICKS; ++i) {
         findChild<QLabel*>(QString("bp%1").arg(i))->setVisible(true);
@@ -95,8 +83,9 @@ void MainWindow::startup() {
 
     ui->screen->setStyleSheet(QString("background-color: " + ALTGRAY));
     ui->coherenceLed->setStyleSheet(QString("background-color: " + GRAY));
-    ui->menu->setItemDelegate(new MenuItemStyle);
+    ui->menu->setItemDelegate(new MenuItemStyle); // Set the style for the menu elements
 
+    // Show main menu and start timers
     showMainMenu();
     updateTime();
     batteryTimer->start(BATTERYLIFE * 60 * 1000 / 100);
@@ -105,8 +94,9 @@ void MainWindow::startup() {
 
 // Shuts down the device
 void MainWindow::shutdown() {
-    if (currentSession) { endSession(); }
+    if (currentSession) { endSession(); } // End session if session is running
 
+    // Disable UI buttons
     ui->menuButton->setEnabled(false);
     ui->backButton->setEnabled(false);
     ui->selectButton->setEnabled(false);
@@ -115,6 +105,7 @@ void MainWindow::shutdown() {
     ui->downButton->setEnabled(false);
     ui->leftButton->setEnabled(false);
 
+    // Disconnect buttons and timers
     disconnect(ui->powerButton, SIGNAL(clicked(bool)), 0, 0);
     connect(ui->powerButton, SIGNAL(clicked(bool)), this, SLOT(startup()));
     disconnect(batteryTimer, SIGNAL(timeout()), 0, 0);
@@ -127,9 +118,11 @@ void MainWindow::shutdown() {
     disconnect(ui->leftButton, SIGNAL(clicked(bool)), 0, 0);
     disconnect(ui->selectButton, SIGNAL(clicked(bool)), 0, 0);
 
+    // Stop battery and timer button
     batteryTimer->stop();
     timeTimer->stop();
 
+    // Turn off screen
     ui->battery->setVisible(false);
     ui->batteryIcon->setVisible(false);
     ui->time->setVisible(false);
@@ -153,18 +146,20 @@ void MainWindow::shutdown() {
     ui->screen->setStyleSheet(QString("background-color: " + GRAY));
     ui->coherenceLed->setStyleSheet(QString("background-color: " + GRAY));
 
+    // Deallocate device variables
     delete batteryTimer;
     delete timeTimer;
-    delete hrSensor;
     delete ui->menu->itemDelegate();
 }
 
 // Shows the main menu
 void MainWindow::showMainMenu() {
+    // Set menu variables and add to history
     menuIndex = 0;
     menuItemIndex = 0;
     menuHistory.append(menuIndex);
 
+    // Show menu elements
     ui->menu->setVisible(true);
     ui->sumView->setVisible(false);
     ui->menu->clear();
@@ -174,53 +169,97 @@ void MainWindow::showMainMenu() {
     ui->menu->setCurrentRow(menuItemIndex);
     ui->menuLabel->setText("Main Menu");
 
+    // Enable corresponding UI buttons
     ui->upButton->setEnabled(true);
     ui->rightButton->setEnabled(false);
     ui->downButton->setEnabled(true);
     ui->leftButton->setEnabled(false);
 
-    if (currentSession) { endSession(); }
+    if (currentSession) { endSession(); } // End session if session is running
 }
 
 // Shows the session display
 void MainWindow::showSessionDisplay() {
+    // Set menu variables and add to history
     menuIndex = 3;
     menuHistory.append(menuIndex);
 
+    // Change screen information and graph background color
+    ui->menuLabel->setText("Session");
+    ui->graph->setBackground(QBrush(QColor(ALTGRAY)));
+    ui->graph->replot();
+
+    // Enable corresponding UI buttons
     ui->menu->setVisible(false);
     ui->sumView->setVisible(false);
     ui->upButton->setEnabled(false);
     ui->rightButton->setEnabled(false);
     ui->downButton->setEnabled(false);
     ui->leftButton->setEnabled(false);
-    ui->menuLabel->setText("Session");
 
-    ui->graph->setBackground(QBrush(QColor(ALTGRAY)));
-    ui->graph->replot();
+    if (!currentSession) { startSession(); } // Start session if session not running
+}
 
-    if (!currentSession) { startSession(); }
+// Displays the summary view for a session
+void MainWindow::showSessionSummary(int sessionIndex){
+    // Set menu variables and add to history
+    menuIndex = 4;
+    menuHistory.append(menuIndex);
+
+    // Enable corresponding UI buttons
+    ui->menu->setVisible(false);
+    ui->upButton->setEnabled(false);
+    ui->rightButton->setEnabled(false);
+    ui->downButton->setEnabled(false);
+    ui->leftButton->setEnabled(false);
+
+    // Get the data to be displayed
+    float achievement = sessionHistory[sessionIndex]->getAchievement();
+    float averageCoherence = sessionHistory[sessionIndex]->getAverageCoherence();
+    int sessionLength = sessionHistory[sessionIndex]->getSessionLength();
+    int challengeLevel = sessionHistory[sessionIndex]->getChallengeLevel();
+    QVector<float> coherenceSpread;
+    sessionHistory[sessionIndex]->getCoherenceSpread(coherenceSpread);
+
+    // Set the labels
+    ui->menuLabel->setText("Session Summary");
+    ui->sumViewAverageCoherence->setText("<b>Average Coherence:</b> " + QString::number(averageCoherence));
+    if(coherenceSpread.length() >= 3){
+        ui->sumViewCoherenceSpread->setText("<b>Coherence Spread:</b> Low: " + QString::number(coherenceSpread[0] * 100) + "%  Med: " + QString::number(coherenceSpread[1] * 100)+ "%  High: " + QString::number(coherenceSpread[2] * 100) + "%");
+    }
+    ui->sumViewSessionLength->setText("<b>Session length:</b> " + QString::number(sessionLength) + " seconds");
+    if(challengeLevel == 1){
+        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Beginner");
+    } else if(challengeLevel == 2){
+        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Novice");
+    } else if(challengeLevel == 3){
+        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Intermediate");
+    } else if(challengeLevel == 4){
+        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Advanced");
+    }
+    ui->sumViewAchievementScore->setText("<b>Achievment Score:</b> " + QString::number(achievement));
+
+    // Make the summary screen visible
+    ui->sumView->setStyleSheet(QString("background-color: " + ALTGRAY));
+    ui->sumView->setVisible(true);
+
+    // Display the entire HRV graph
+    ui->sumViewGraph->setBackground(QBrush(QColor(ALTGRAY)));
+    sessionHistory[sessionIndex]->plotAllData(ui->sumViewGraph);
 }
 
 // Shows the history menu
 void MainWindow::showHistoryMenu() {
+    // Set menu variables and add to history
     menuIndex = 1;
     menuItemIndex = 0;
     menuHistory.append(menuIndex);
     historyViewDelete = false;
 
+    // Show menu elements
     ui->menu->setVisible(true);
     ui->sumView->setVisible(false);
     ui->menu->clear();
-    ui->upButton->setEnabled(true);
-    ui->downButton->setEnabled(true);
-    ui->leftButton->setEnabled(false);
-
-    if (sessionHistory.count() > 0) {
-        ui->rightButton->setEnabled(true);
-    } else {
-        ui->rightButton->setEnabled(false);
-    }
-
     ui->menuLabel->setText("History");
 
     for(int i=0; i<sessionHistory.count(); ++i) {
@@ -232,21 +271,26 @@ void MainWindow::showHistoryMenu() {
     }
 
     ui->menu->setCurrentRow(menuItemIndex);
+
+    // Enable corresponding UI buttons
+    ui->upButton->setEnabled(true);
+    ui->downButton->setEnabled(true);
+    ui->leftButton->setEnabled(false);
+    if (sessionHistory.count() > 0) {  ui->rightButton->setEnabled(true); }
+    else {  ui->rightButton->setEnabled(false); }
 }
 
 // Shows the settings menu
 void MainWindow::showSettingsMenu() {
+    // Set menu variables and add to history
     menuIndex = 2;
     menuItemIndex = 0;
     menuHistory.append(menuIndex);
 
+    // Show menu elements
     ui->menu->setVisible(true);
     ui->sumView->setVisible(false);
     ui->menu->clear();
-    ui->upButton->setEnabled(true);
-    ui->rightButton->setEnabled(true);
-    ui->downButton->setEnabled(true);
-    ui->leftButton->setEnabled(true);
     ui->menuLabel->setText("Settings");
 
     if (challengeLevelSetting == 1) {
@@ -262,25 +306,35 @@ void MainWindow::showSettingsMenu() {
     ui->menu->addItem("Breath Pacer interval: <b>" + QString::number(breathPacerSetting) + "s</b>");
     ui->menu->addItem("Reset device");
     ui->menu->setCurrentRow(menuItemIndex);
+
+    // Enable corresponding UI buttons
+    ui->upButton->setEnabled(true);
+    ui->rightButton->setEnabled(true);
+    ui->downButton->setEnabled(true);
+    ui->leftButton->setEnabled(true);
 }
 
 // Up button is clicked
 void MainWindow::upButton() {
+    // If inside session history menu, remove underline from view/delete buttons
     if (menuIndex == 1 && sessionHistory.count() > 1) {
         historyViewDelete = false;
         ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'>" + sessionHistory[menuItemIndex]->getName() + "                   ⌫</span>");
     }
 
+    // Increment and highlight menu item
     menuItemIndex = (menuItemIndex - 1);
     if (menuItemIndex < 0) { menuItemIndex = ui->menu->count() - 1; }
     ui->menu->setCurrentRow(menuItemIndex);
 
+    // If inside session history menu, underline view history button
     if (menuIndex == 1 && sessionHistory.count() > 1) {
         ui->rightButton->setEnabled(true);
         ui->leftButton->setEnabled(false);
         ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
     }
 
+    // If inside settings menu, disable right/left arrows if "reset device" option is highlighted
     if (menuIndex == 2) {
         if (menuItemIndex == 2) {
             ui->rightButton->setEnabled(false);
@@ -294,21 +348,25 @@ void MainWindow::upButton() {
 
 // Down button is clicked
 void MainWindow::downButton() {
+    // If inside session history menu, remove underline from view/delete buttons
     if (menuIndex == 1 && sessionHistory.count() > 1) {
         historyViewDelete = false;
         ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'>" + sessionHistory[menuItemIndex]->getName() + "                   ⌫</span>");
     }
 
+    // Decrement and highlight menu item
     menuItemIndex = (menuItemIndex + 1);
     if (menuItemIndex > ui->menu->count() - 1) { menuItemIndex = 0; }
     ui->menu->setCurrentRow(menuItemIndex);
 
+    // If inside session history menu, underline view history button
     if (menuIndex == 1 && sessionHistory.count() > 1) {
         ui->rightButton->setEnabled(true);
         ui->leftButton->setEnabled(false);
         ui->menu->item(menuItemIndex)->setText("<span style='white-space: pre;'><u>" + sessionHistory[menuItemIndex]->getName() + "</u>                   ⌫</span>");
     }
 
+    // If inside settings menu, disable right/left arrows if "reset device" option is highlighted
     if (menuIndex == 2) {
         if (menuItemIndex == 2) {
             ui->rightButton->setEnabled(false);
@@ -322,6 +380,7 @@ void MainWindow::downButton() {
 
 // Right button is clicked
 void MainWindow::rightButton() {
+    // If inside settings menu, toggle between challenge level and breath pacer options
     if (menuIndex == 2) {
         if (menuItemIndex == 0) {
             challengeLevelSetting += 1;
@@ -350,7 +409,10 @@ void MainWindow::rightButton() {
                 ui->menu->item(1)->setText("Breath Pacer interval: <b>" + QString::number(breathPacerSetting) + "s</b>");
             }
         }
-    } else if (menuIndex == 1 && sessionHistory.count() > 0) {
+    }
+
+    // If inside history menu, underline delete button
+    else if (menuIndex == 1 && sessionHistory.count() > 0) {
         historyViewDelete = true;
         ui->rightButton->setEnabled(false);
         ui->leftButton->setEnabled(true);
@@ -360,6 +422,7 @@ void MainWindow::rightButton() {
 
 // Left button is clicked
 void MainWindow::leftButton() {
+    // If inside settings menu, toggle between challenge level and breath pacer options
     if (menuIndex == 2) {
         if (menuItemIndex == 0) {
             challengeLevelSetting -= 1;
@@ -388,7 +451,10 @@ void MainWindow::leftButton() {
                 ui->menu->item(1)->setText("Breath Pacer interval: <b>" + QString::number(breathPacerSetting) + "s</b>");
             }
         }
-    } else if (menuIndex == 1 && sessionHistory.count() > 0) {
+    }
+
+    // If inside history menu, underline select button
+    else if (menuIndex == 1 && sessionHistory.count() > 0) {
         historyViewDelete = false;
         ui->rightButton->setEnabled(true);
         ui->leftButton->setEnabled(false);
@@ -398,6 +464,7 @@ void MainWindow::leftButton() {
 
 // Select button is clicked
 void MainWindow::selectButton() {
+    // If inside main menu, select corresponding option
     if (menuIndex == 0) {
         if (menuItemIndex == 0) {
             showSessionDisplay();
@@ -406,7 +473,10 @@ void MainWindow::selectButton() {
         } else if (menuItemIndex == 2) {
             showSettingsMenu();
         }
-    } else if (menuIndex == 1 && sessionHistory.count() > 0) {
+    }
+
+    // If inside session history menu, delete session if delete button is underlined or select session if view button is underlined
+    else if (menuIndex == 1 && sessionHistory.count() > 0) {
         if (historyViewDelete) {
             delete sessionHistory[menuItemIndex];
             sessionHistory.removeAt(menuItemIndex);
@@ -427,18 +497,27 @@ void MainWindow::selectButton() {
         } else {
             showSessionSummary(menuItemIndex);
         }
-    } else if (menuIndex == 2) {
+    }
+
+    // If inside settings menu, reset device if option is highlighted
+    else if (menuIndex == 2) {
         if (menuItemIndex == 2) {
             reset();
         }
-    } else if (menuIndex == 3) {
+    }
+
+    // If in a session, end it and show summary
+    else if (menuIndex == 3) {
         if (currentSession) {
             endSession();
             showSessionSummary(0);
         } else {
             showHistoryMenu();
         }
-    } else if (menuIndex == 4) {
+    }
+
+    // If viewing session summary, return to session history menu
+    else if (menuIndex == 4) {
         showHistoryMenu();
     }
 }
@@ -446,17 +525,23 @@ void MainWindow::selectButton() {
 // Back button is clicked
 void MainWindow::backButton() {
     if (menuHistory.size() >= 2) {
+
+        // If we are in a session, end it
         if (menuHistory.last() == 3 && currentSession) {
             endSession();
         }
 
+        // Remove current screen from history
         menuHistory.removeLast();
 
+        // If we are already in the screen we need to go back to, return
         if (menuIndex == menuHistory.last()) { return; }
 
+        // Get the screen we need to go back to and remove it from history
         menuIndex = menuHistory.last();
         menuHistory.removeLast();
 
+        // Change to corresponding menu
         if (menuIndex == 0) {
             showMainMenu();
         } else if (menuIndex == 1) {
@@ -471,12 +556,17 @@ void MainWindow::backButton() {
 
 // Starts a new session
 void MainWindow::startSession() {
+    // Create new heart rate sensor
+    hrSensor = new HeartRateSensor();
+
+    // Start breath pacer timer and setup animation
     breathPacerTimer = new QTimer(this);
     breathPacerIndex = 0;
     connect(breathPacerTimer, SIGNAL(timeout()), this, SLOT(breathPacerTick()));
     breathPacerTick();
     breathPacerTimer->start(breathPacerSetting * 1000 / (BPTICKS * 2));
 
+    // Start session timer and create session class
     sessionTimer = new QTimer(this);
     sessionTime = 0;
     connect(sessionTimer, SIGNAL(timeout()), this, SLOT(sessionTick()));
@@ -487,24 +577,31 @@ void MainWindow::startSession() {
 
 // End the current session
 void MainWindow::endSession() {
+    // Stop session and breath pacer timers
     sessionTimer->stop();
     breathPacerTimer->stop();
 
+    // Deallocate timers and sensor from memory
     delete sessionTimer;
     delete breathPacerTimer;
+    delete hrSensor;
 
+    // If in a session, add it to the history
     if (currentSession) {
         sessionHistory.prepend(currentSession);
         currentSession = NULL;
     }
 
+    // Reset coherence light and time variable
     setCoherenceScore(-1);
     sessionTime = 0;
 }
 
 // Runs a session loop
 void MainWindow::sessionTick() {
-    int heartrate = hrSensor->getHeartRate(sessionTime);
+    int heartrate = hrSensor->getHeartRate(sessionTime); // Get heart rate at current time
+
+    // Update metrics in view if data is valid, disable heart label otherwise
     if (heartrate == -1) {
         noHeartData();
     } else {
@@ -513,13 +610,16 @@ void MainWindow::sessionTick() {
         displaySessionMetrics();
     }
 
-    sessionTime++;
+    sessionTime++; // Increment time
 }
 
 // Shows the session metrics
 void MainWindow::displaySessionMetrics() {
+    // Update length and graph
     setLength(sessionTime);
     currentSession->plotCurrentData(ui->graph);
+
+    // Update coherence score and achievement every 5 seconds
     if (sessionTime % 5 == 0) {
         float lastCoherence = currentSession->getLastCoherence();
         float newCoherence = currentSession->calculateCoherence();
@@ -533,6 +633,8 @@ void MainWindow::displaySessionMetrics() {
 
 // Updates the breath pacer by incrementing/decrementing the lights
 void MainWindow::breathPacerTick() {
+
+    // For every breath pacer tick, enable the right amount depending on breathPacerIndex
     for (int i=1; i<BPTICKS; ++i) {
         QLabel* led;
         bool on;
@@ -552,10 +654,13 @@ void MainWindow::breathPacerTick() {
         }
     }
 
+    // Increment breathPacerIndex
     breathPacerIndex = (breathPacerIndex + 1) % (BPTICKS * 2);
 }
 
+// Calculate coherence level
 int MainWindow::getCoherenceLevel(float c) {
+    // Set lower and upper bounds based on challenge level settings
     float lower, upper;
     if (challengeLevelSetting == 1) {
         lower = 0.5;
@@ -583,15 +688,17 @@ int MainWindow::getCoherenceLevel(float c) {
 // Takes a float [0-16] and updates the coherence score on the UI
 void MainWindow::setCoherenceScore(float c) {
 
+    // If coherence invalid, turn off light
     if (c < 0) {
         ui->coherenceLed->setStyleSheet(QString("background-color: " + GRAY));
         return;
     }
 
+    // Update screen text
     ui->coherence->setText(QString::number(c));
 
+    // Calculate coherence score and turn light to corresponding color
     int score = getCoherenceLevel(c);
-
     if (score == 0) {
         ui->coherenceLed->setStyleSheet(QString("background-color: " + RED));
     } else if (score == 1) {
@@ -621,8 +728,9 @@ void MainWindow::noHeartData(){
 
 // Decrements the battery and updates the UI
 void MainWindow::updateBattery() {
-    battery -= 1;
+    battery -= 1; // Decrement battery level
 
+    // Update battery label or shutdown if dead
     if (battery <= 0) {
         shutdown();
     } else {
@@ -652,50 +760,4 @@ void MainWindow::reset() {
     qDeleteAll(sessionHistory);
 
     showMainMenu();
-}
-
-// Displays the summary view for a session
-void MainWindow::showSessionSummary(int sessionIndex){
-    menuIndex = 4;
-    menuHistory.append(menuIndex);
-
-    ui->menu->setVisible(false);
-    ui->upButton->setEnabled(false);
-    ui->rightButton->setEnabled(false);
-    ui->downButton->setEnabled(false);
-    ui->leftButton->setEnabled(false);
-
-    //Get the data to be displayed
-    float achievement = sessionHistory[sessionIndex]->getAchievement();
-    float averageCoherence = sessionHistory[sessionIndex]->getAverageCoherence();
-    int sessionLength = sessionHistory[sessionIndex]->getSessionLength();
-    int challengeLevel = sessionHistory[sessionIndex]->getChallengeLevel();
-    QVector<float> coherenceSpread;
-    sessionHistory[sessionIndex]->getCoherenceSpread(coherenceSpread);
-
-    //Set the labels
-    ui->menuLabel->setText("Session Summary");
-    ui->sumViewAverageCoherence->setText("<b>Average Coherence:</b> " + QString::number(averageCoherence));
-    if(coherenceSpread.length() >= 3){
-        ui->sumViewCoherenceSpread->setText("<b>Coherence Spread:</b> Low: " + QString::number(coherenceSpread[0] * 100) + "%  Med: " + QString::number(coherenceSpread[1] * 100)+ "%  High: " + QString::number(coherenceSpread[2] * 100) + "%");
-    }
-    ui->sumViewSessionLength->setText("<b>Session length:</b> " + QString::number(sessionLength) + " seconds");
-    if(challengeLevel == 1){
-        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Beginner");
-    } else if(challengeLevel == 2){
-        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Novice");
-    } else if(challengeLevel == 3){
-        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Intermediate");
-    } else if(challengeLevel == 4){
-        ui->sumViewChallengeLevel->setText("<b>Challenge level:</b> Advanced");
-    }
-    ui->sumViewAchievementScore->setText("<b>Achievment Score:</b> " + QString::number(achievement));
-
-    //Make the summary screen visible
-    ui->sumView->setStyleSheet(QString("background-color: " + ALTGRAY));
-    ui->sumView->setVisible(true);
-
-    //Display the entire HRV graph
-    ui->sumViewGraph->setBackground(QBrush(QColor(ALTGRAY)));
-    sessionHistory[sessionIndex]->plotAllData(ui->sumViewGraph);
 }

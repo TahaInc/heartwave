@@ -1,10 +1,18 @@
 #include "heartratesensor.h"
 
-HeartRateSensor::HeartRateSensor()
+HeartRateSensor::HeartRateSensor(int ds)
 {
-    srand(time(0));
-    int rndVal = (rand() % 3);
+    int rndVal;
 
+    // If dataset not specified, pick random int from [0-2]
+    if (ds == -1) {
+        srand(time(0));
+        rndVal = (rand() % 3);
+    } else {
+        rndVal = ds;
+    }
+
+    // Set heart rate data to specified dataset
     if (rndVal == 0) {
         data << 104 << 108 << 111 << 110 << 110 << 97 << 77 << 71 << 73 << 75 << 81 << 87 << 95 << 97 << 98 << 98 << 101 << 97 << 69 << 76 << 84 << 92 << 96 << 94 << 77 << 73 << 70 << 70 << 70 << 77 << 87 << 93 << 105 << 105 << 107 << 99 << 67 << 65 << 68 << 68 << 79 << 92 << 102 << 104 << 102 << 98 << 69 << 69 << 70 << 76 << 89 << 95 << 104 << 105 << 106 << 104 << 76 << 74 << 74 << 80 << 91 << 98 << 105 << 108 << 108 << 109 << 101 << 76 << 74 << 75 << 86 << 94 << 104 << 108 << 108 << 102 << 75 << 75 << 80 << 84 << 91 << 97 << 107 << 107 << 107 << 101 << 73 << 73 << 77 << 81 << 90 << 104 << 108 << 108 << 108 << 101 << 77 << 70 << 74 << 77 << 86 << 94 << 104 << 105 << 107 << 107 << 78 << 79 << 83 << 86 << 98 << 102 << 110 << 111 << 111 << 107 << 86 << 81 << 84 << 89;
     } else if (rndVal == 1) {
@@ -15,8 +23,10 @@ HeartRateSensor::HeartRateSensor()
 }
 
 int HeartRateSensor::getHeartRate(int time) {
+    // If time is valid, return corresponding heart rate data
     if (0 <= time && time < data.size()) {
         return data[time];
     }
+
     return -1;
 }

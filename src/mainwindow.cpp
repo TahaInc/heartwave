@@ -148,7 +148,9 @@ void MainWindow::shutdown() {
 
     // Deallocate device variables
     delete batteryTimer;
+    batteryTimer = nullptr;
     delete timeTimer;
+    timeTimer = nullptr;
     delete ui->menu->itemDelegate();
 }
 

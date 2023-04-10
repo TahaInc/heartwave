@@ -1,6 +1,13 @@
 # Heartwave
 
+The following link is the video demo of the project.
 Youtube Link: https://www.youtube.com/watch?v=xdZD85LBHXs
+
+The docs folder contains the use cases, traceability matrix, and sequence diagrams.
+The scr folder contains the source code for the project.
+The images folder contains images of the UI.
+The data folder contains the data sets of heart rate data used in the code.
+
 ### Main features:
 
 - Measures, analyzes and displays HRV (Heart Rate Variability) patterns

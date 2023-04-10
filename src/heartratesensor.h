@@ -3,7 +3,6 @@
 
 #include <QVector>
 #include <ctime>
-#include <QDebug>
 
 class HeartRateSensor
 {

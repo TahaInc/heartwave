@@ -1,6 +1,6 @@
 # Heartwave
 
-**Youtube Link: https://www.youtube.com/watch?v=xdZD85LBHXs
+Youtube Link: https://www.youtube.com/watch?v=xdZD85LBHXs
 ### Main features:
 
 - Measures, analyzes and displays HRV (Heart Rate Variability) patterns

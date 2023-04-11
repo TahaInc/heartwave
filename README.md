@@ -4,7 +4,8 @@
 **Video demo:**<br/>
 https://www.youtube.com/watch?v=xdZD85LBHXs
 <br />**Folders:**<br/>
-**docs:** contains the use cases, traceability matrix, and sequence diagrams. scr: contains the source code for the project.
+**docs:** contains the use cases, traceability matrix, and sequence diagrams. 
+<br />**scr:** contains the source code for the project.
 <br />**images:** contains images of the UI.
 <br />**data:** contains the data sets of heart rate data used in the code.
 
@@ -18,9 +19,11 @@ https://www.youtube.com/watch?v=xdZD85LBHXs
 <br />
 
 **Classes:**<br />
-mainwindow: The main window of the application, acts as the control of the application heartratesensor: Simulator of an actual heart rate sensor, holds heart rate dataset
-<br />session: Handles calculations of session informations (e.g., coherence score, data plotting, etc) qcustomplot: widget for plotting and data visualization
-<br />menuitemstyle: item delegate class to paint HTML into the menu list items
+**mainwindow:** The main window of the application, acts as the control of the application 
+<br />**heartratesensor:** Simulator of an actual heart rate sensor, holds heart rate dataset
+<br />**session:** Handles calculations of session informations (e.g., coherence score, data plotting, etc) 
+<br />**qcustomplot:** widget for plotting and data visualization
+<br />**menuitemstyle:** item delegate class to paint HTML into the menu list items
 <br />
 ### Main features:
 

@@ -3,25 +3,25 @@
 ### Folder Layout:
 Video demo
 https://www.youtube.com/watch?v=xdZD85LBHXs
-Folders
+Folders:<br/>
 docs: contains the use cases, traceability matrix, and sequence diagrams. scr: contains the source code for the project.
-images: contains images of the UI.
-data: contains the data sets of heart rate data used in the code.
+<br />images: contains images of the UI.
+<br />data: contains the data sets of heart rate data used in the code.
 
 ### Project Information:
-Team Members' Contributions:
+Team Members' Contributions:<br />
 
 Michael Bradley: 
-Zachary Call:
-Taha Rhidouani:
-Jared Tarnocai: Use Cases: 2,7,8; Sequence diagrams: 2,7,8, Battery Low, Sensor Interruption; session summary view implementation; Worked on: traceability matrix, class diagram, coherence score algorithm, bug fixes.
+<br />Zachary Call:
+<br />Taha Rhidouani:
+<br />Jared Tarnocai: Use Cases: 2,7,8; Sequence diagrams: 2,7,8, Battery Low, Sensor Interruption; session summary view implementation; Worked on: traceability matrix, class diagram, coherence score algorithm, bug fixes.
+<br />
 
-
-Classes:
+Classes:<br />
 mainwindow: The main window of the application, acts as the control of the application heartratesensor: Simulator of an actual heart rate sensor, holds heart rate dataset
-session: Handles calculations of session informations (e.g., coherence score, data plotting, etc) qcustomplot: widget for plotting and data visualization
-menuitemstyle: item delegate class to paint HTML into the menu list items
-
+<br />session: Handles calculations of session informations (e.g., coherence score, data plotting, etc) qcustomplot: widget for plotting and data visualization
+<br />menuitemstyle: item delegate class to paint HTML into the menu list items
+<br />
 ### Main features:
 
 - Measures, analyzes and displays HRV (Heart Rate Variability) patterns

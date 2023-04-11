@@ -13,7 +13,7 @@ https://www.youtube.com/watch?v=xdZD85LBHXs
 **Team Members' Contributions:**<br />
 
 **Michael Bradley:** 
-<br />**Zachary Call:**
+<br />**Zachary Call:** Use Cases: 1,3,4; Sequence diagrams: 1,3,4; receiving/not receiving heartrate data implementation; collection of real life heartrate data (3 samples); design and implementation of coherence score algorithm; bug fixes
 <br />**Taha Rhidouani:**
 <br />**Jared Tarnocai:** Use Cases: 2,7,8; Sequence diagrams: 2,7,8, Battery Low, Sensor Interruption; session summary view implementation; Worked on: traceability matrix, class diagram, coherence score algorithm, bug fixes.
 <br />

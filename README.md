@@ -1,23 +1,23 @@
 # Heartwave
 
 ### Folder Layout:
-Video demo
+**Video demo:**<br/>
 https://www.youtube.com/watch?v=xdZD85LBHXs
-Folders:<br/>
-docs: contains the use cases, traceability matrix, and sequence diagrams. scr: contains the source code for the project.
-<br />images: contains images of the UI.
-<br />data: contains the data sets of heart rate data used in the code.
+<br />**Folders:**<br/>
+**docs:** contains the use cases, traceability matrix, and sequence diagrams. scr: contains the source code for the project.
+<br />**images:** contains images of the UI.
+<br />**data:** contains the data sets of heart rate data used in the code.
 
 ### Project Information:
-Team Members' Contributions:<br />
+**Team Members' Contributions:**<br />
 
-Michael Bradley: 
-<br />Zachary Call:
-<br />Taha Rhidouani:
-<br />Jared Tarnocai: Use Cases: 2,7,8; Sequence diagrams: 2,7,8, Battery Low, Sensor Interruption; session summary view implementation; Worked on: traceability matrix, class diagram, coherence score algorithm, bug fixes.
+**Michael Bradley:** 
+<br />**Zachary Call:**
+<br />**Taha Rhidouani:**
+<br />**Jared Tarnocai:** Use Cases: 2,7,8; Sequence diagrams: 2,7,8, Battery Low, Sensor Interruption; session summary view implementation; Worked on: traceability matrix, class diagram, coherence score algorithm, bug fixes.
 <br />
 
-Classes:<br />
+**Classes:**<br />
 mainwindow: The main window of the application, acts as the control of the application heartratesensor: Simulator of an actual heart rate sensor, holds heart rate dataset
 <br />session: Handles calculations of session informations (e.g., coherence score, data plotting, etc) qcustomplot: widget for plotting and data visualization
 <br />menuitemstyle: item delegate class to paint HTML into the menu list items

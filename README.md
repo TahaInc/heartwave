@@ -18,9 +18,9 @@ https://www.youtube.com/watch?v=xdZD85LBHXs
 
 **Michael Bradley:** Use cases 5,6; Sequence diagrams 5,6; Heart rate graphing functions (session and summary); Use case diagram; Worked on: traceability matrix, class diagram, bug fixes (including memory leaks), heart rate sensor and session functionality.
 
-**Zachary Call:** Use Cases: 1,3,4; Sequence diagrams: 1,3,4; receiving/not receiving heartrate data implementation; collection of real life heartrate data (3 samples); design and implementation of coherence score algorithm; bug fixes.
+**Zachary Call:** Use Cases: 1,3,4; Sequence diagrams: 1,3,4; receiving/not receiving heartrate data implementation; collection of real life heartrate data (3 samples); design and implementation of coherence score algorithm; bug fixes; sensor off use case.
 
-**Taha Rhidouani:** UI design & menu interface logic; startup & shutdown routine; undo button logic; history menu; settings menu; bug fixes.
+**Taha Rhidouani:** UI design & menu interface logic; startup & shutdown routine; undo button logic; history menu; settings menu; bug fixes; sensor off use case.
 
 **Jared Tarnocai:** Use Cases: 2,7,8,9; Sequence diagrams: 2,7,8,9,10; session summary view implementation; Worked on: traceability matrix, class diagram, coherence score algorithm, bug fixes.
 

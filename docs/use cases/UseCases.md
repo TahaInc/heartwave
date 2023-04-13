@@ -285,3 +285,25 @@ Extensions
   * 2a1. The device ends the session
 
 ## Sensor Off (UC10)
+
+Primary Actor
+
+- Device user
+
+Precondition
+
+- The device is currently receiving data
+
+Main Success Scenario
+
+1. There's no more data being receiving in the sensor
+2. Heartrate icon changes from green (on) to black (no data)
+
+Postcondition
+
+- Heartrate icon is black
+
+Extensions
+
+- 1-7a. The device is out of battery.
+  - 1-7a1. The user charges the device, and tries again from step 1.

@@ -256,3 +256,8 @@ Extensions
 Related Information
 
 * To leave this menu (step 3 or 7), the user could enter UC7 by selecting a session.
+
+## Battery Low (UC9)
+
+
+## Sensor Off (UC10)

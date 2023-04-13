@@ -45,7 +45,7 @@ https://www.youtube.com/watch?v=xdZD85LBHXs
 
 <br />
 
-**Features a clean & easy user inteface** <br><img src="./images/screenshot_1.png?raw=true" height="500">
+**Features a clean & easy user interface** <br><img src="./images/screenshot_1.png?raw=true" height="500">
 
 **Extensive session view with live updates** <br><img src="./images/screenshot_2.png?raw=true" height="500">
 

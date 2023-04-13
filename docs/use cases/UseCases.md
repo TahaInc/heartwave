@@ -26,7 +26,7 @@ Postcondition
 Extensions
 
 * 2a. The device is out of battery
-  * 2a1. The user plugs in the device to charge it, and then tries again.
+  * 2a1. Follow the use case for battery low (UC9).
 
 ## Turn Device Off (UC2)
 
@@ -82,7 +82,7 @@ Postcondition
 Extensions
 
 * 1-3a. The device is out of battery.
-  * 1-3a1. The user charges the device, and tries again from step 1.
+  * 1-3a1. Follow the use case for battery low (UC9).
 * 3a. An invalid value is selected
   * 3a1. The device defaults the breath pacer interval value to 10 seconds.
 * 3b. The device has never been initialized or recently reset
@@ -113,7 +113,7 @@ Postcondition
 Extensions
 
 * 1-3a. The device is out of battery.
-  * 1-3a1. The user charges the device, and tries again from step 1.
+  * 1-3a1. Follow the use case for battery low (UC9).
 * 3a. An invalid value is selected
   * 3a1. The device defaults to level 1.
 * 3b. The device has never been initialized or recently reset
@@ -218,7 +218,7 @@ Postcondition
 Extensions
 
 * 1-5a. The device is out of battery
-  * 1-5a1. The user charges the device, and tries again
+  * 1-5a1. Follow the use case for battery low (UC9)
 
 ## Delete a Result (UC8)
 
@@ -248,7 +248,7 @@ Postcondition
 Extensions
 
 * 1-7a. The device is out of battery.
-  * 1-7a1. The user charges the device, and tries again from step 1.
+  * 1-7a1. Follow the battery low (UC9).
 * 7a. There are no more sessions stored.
   * 7a1. The device screen resets, no longer displaying the log/history menu.
   * 7a2. The default menu is displayed (the arrow buttons now interact with this menu).
@@ -258,6 +258,30 @@ Related Information
 * To leave this menu (step 3 or 7), the user could enter UC7 by selecting a session.
 
 ## Battery Low (UC9)
+Primary Actor
 
+* The device
+
+Precondition
+
+* The device has no remaining battery
+* The device is currently on
+
+Main Success Scenario
+
+1. The device checks the current battery level
+2. The device shuts down
+3. The device turns off the running timers
+4. The device turns off the screen
+
+Postcondition
+
+* The device is off
+* No timers are running
+
+Extensions
+
+* 2a. If the device is currently in a session
+  * 2a1. The device ends the session
 
 ## Sensor Off (UC10)

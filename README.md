@@ -22,7 +22,7 @@ https://www.youtube.com/watch?v=xdZD85LBHXs
 
 **Taha Rhidouani:** UI design & menu interface logic; startup & shutdown routine; undo button logic; history menu; settings menu; bug fixes.
 
-**Jared Tarnocai:** Use Cases: 2,7,8; Sequence diagrams: 2,7,8, Battery Low, Sensor Interruption; session summary view implementation; Worked on: traceability matrix, class diagram, coherence score algorithm, bug fixes.
+**Jared Tarnocai:** Use Cases: 2,7,8,9; Sequence diagrams: 2,7,8,9,10; session summary view implementation; Worked on: traceability matrix, class diagram, coherence score algorithm, bug fixes.
 
 ### Classes:
 

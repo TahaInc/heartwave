@@ -248,7 +248,7 @@ Postcondition
 Extensions
 
 * 1-7a. The device is out of battery.
-  * 1-7a1. Follow the battery low (UC9).
+  * 1-7a1. Follow the use case for battery low (UC9).
 * 7a. There are no more sessions stored.
   * 7a1. The device screen resets, no longer displaying the log/history menu.
   * 7a2. The default menu is displayed (the arrow buttons now interact with this menu).

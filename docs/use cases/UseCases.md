@@ -306,4 +306,4 @@ Postcondition
 Extensions
 
 - 1-7a. The device is out of battery.
-  - 1-7a1. The user charges the device, and tries again from step 1.
+  - 1-7a1. Follow the use case for battery low (UC9).

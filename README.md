@@ -6,7 +6,7 @@ https://www.youtube.com/watch?v=xdZD85LBHXs
 
 ### Folder Layout:
 
-**docs:** contains the use cases, traceability matrix, and sequence diagrams.
+**docs:** contains the use cases, use case diagram, traceability matrix, class diagram, and sequence diagrams.
 
 **src:** contains the source code for the project.
 

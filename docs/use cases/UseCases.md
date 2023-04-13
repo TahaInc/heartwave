@@ -149,7 +149,7 @@ Postcondition
 Extensions
 
 * 4a. There is no new heart rate data available.
-  * 4a1. The display doe not update.
+  * 4a1. The display does not update.
 * 5a. The device gets turned off.
   * 5a1. See UC2, extension 1a.
 * 5b. The user presses the back button.

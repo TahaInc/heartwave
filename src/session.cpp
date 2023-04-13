@@ -171,7 +171,7 @@ void Session::getCoherenceSpread(QVector<float> &intervals){
     for(int i = 0; i < coherenceScores.length(); i++){
         //The following 2 if-statements of code has been taken from the setCoherenceScore() function in mainwindow.cpp (modified slightly)
         //Get the bounds for the coherence levels based on the challenge level
-        int lower, upper;
+        float lower, upper;
         if (challengeLevel == 1) {
             lower = 0.5;
             upper = 0.9;

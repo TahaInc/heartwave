@@ -7,8 +7,6 @@
 - **images:** contains images of the UI.
 - **data:** contains the data sets of heart rate data used in the code.
 
-<br />
-
 ### Classes:
 
 - **mainwindow:** The main window of the application, acts as the control of the application
@@ -16,8 +14,6 @@
 - **session:** Handles calculations of session informations (e.g., coherence score, data plotting, etc)
 - **qcustomplot:** widget for plotting and data visualization
 - **menuitemstyle:** item delegate class to paint HTML into the menu list items
-
-<br />
 
 ### Main features:
 

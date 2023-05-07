@@ -5,7 +5,9 @@
 - **docs:** contains the use cases, use case diagram, traceability matrix, class diagram, and sequence diagrams.
 - **src:** contains the source code for the project.
 - **images:** contains images of the UI.
-- **data:** contains the data sets of heart rate data used in the code. <br> <br>
+- **data:** contains the data sets of heart rate data used in the code.
+
+<br />
 
 ### Classes:
 
@@ -13,7 +15,9 @@
 - **heartratesensor:** Simulator of an actual heart rate sensor, holds heart rate dataset
 - **session:** Handles calculations of session informations (e.g., coherence score, data plotting, etc)
 - **qcustomplot:** widget for plotting and data visualization
-- **menuitemstyle:** item delegate class to paint HTML into the menu list items <br><br>
+- **menuitemstyle:** item delegate class to paint HTML into the menu list items
+
+<br />
 
 ### Main features:
 
